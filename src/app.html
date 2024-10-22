@@ -1,12 +1,53 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
-	</head>
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+      /* Global Styles for Black Background and Ford Grabber Blue Accents */
+      body {
+        background-color: #000; /* Black background */
+        color: #52c4f5; /* Ford Grabber Blue text for headings and important elements */
+        font-family: 'Montserrat', sans-serif; /* Elegant and bold font */
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      a {
+        color: #52c4f5; /* Ford Grabber Blue for links */
+        text-decoration: none;
+      }
+
+      a:hover {
+        color: white; /* Hover effect for links */
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        color: #52c4f5; /* Ford Grabber Blue for headings */
+        text-transform: uppercase;
+      }
+
+      button {
+        background-color: #52c4f5; /* Ford Grabber Blue background */
+        color: #000; /* Black text */
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: white;
+        color: #000; /* Hover state for buttons */
+      }
+    </style>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>
