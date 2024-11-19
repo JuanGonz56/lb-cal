@@ -158,7 +158,7 @@
 {#if isPublicRoute}
 	<!-- Clickable Logo to redirect to the /public page -->
 	<div class="logo-container">
-		<a href="/public" sveltekit:prefetch>
+		<a href="/public">
 			<img src={logoSrc} alt="LB Calipers Logo" />
 		</a>
 	</div>

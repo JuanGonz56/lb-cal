@@ -14,6 +14,8 @@
             {#if $auth === undefined}
                 <p>Loading...</p>
             {:else if $auth === null}
+                <button class="hover:underline" on:click={auth.sign_in}>Sign In</button>
+
                 <button class="hover:underline" on:click={redirectToLogin}>Sign In</button> <!-- Redirecting to login -->
             {:else}
                 <button class="hover:underline" on:click={auth.sign_out}>Sign Out</button> |

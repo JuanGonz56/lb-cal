@@ -72,9 +72,7 @@
 
 		<div class="carousel">
 			<button class="arrow" on:click={() => prevImage('calipers')}>&#9664;</button>
-
 			<img src={calipersImages[activeCaliperIndex]} alt="Caliper Image" class="main-image" />
-
 			<button class="arrow" on:click={() => nextImage('calipers')}>&#9654;</button>
 		</div>
 
@@ -100,9 +98,7 @@
 
 		<div class="carousel">
 			<button class="arrow" on:click={() => prevImage('wheels')}>&#9664;</button>
-
 			<img src={wheelsImages[activeWheelIndex]} alt="Wheel Image" class="main-image" />
-
 			<button class="arrow" on:click={() => nextImage('wheels')}>&#9654;</button>
 		</div>
 
@@ -149,7 +145,7 @@
 		width: 450px;
 		height: auto;
 		border-radius: 10px;
-		border: 3px solid #66ccff;
+		border: 3px solid #52c4f5;
 		object-fit: cover;
 	}
 
@@ -157,7 +153,7 @@
 		position: absolute;
 		top: 50%;
 		background: rgba(0, 0, 0, 0.6);
-		color: white;
+		color: #52c4f5;
 		border: none;
 		cursor: pointer;
 		font-size: 2rem;
@@ -166,7 +162,7 @@
 	}
 
 	.arrow:hover {
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(11, 80, 108, 0.447);
 	}
 
 	.arrow:first-of-type {
@@ -179,21 +175,23 @@
 
 	.thumbnails {
 		display: flex;
-		gap: 1rem;
+		justify-content: center;
+		gap: 0.5rem;
 		overflow-x: auto;
 		padding: 1rem 0;
 	}
 
 	.thumbnails img {
 		width: 80px;
-		height: auto;
+		height: 80px;
 		cursor: pointer;
 		border: 2px solid transparent;
 		border-radius: 5px;
+		object-fit: cover;
 	}
 
 	.thumbnails img.selected {
-		border-color: #66ccff;
+		border-color: #52c4f5;
 	}
 
 	.book-now-container {
