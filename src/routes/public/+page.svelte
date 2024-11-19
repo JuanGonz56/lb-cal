@@ -228,8 +228,8 @@
 
   .btn:hover {
     background-color: black;
-    color: #66CCFF;
-    border: 1.5px solid #66CCFF;
+    color: #52c4f5;
+    border: 1.5px solid #52c4f5;
   }
 
   /* Side-by-Side Image Containers */

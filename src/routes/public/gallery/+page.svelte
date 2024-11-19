@@ -1,137 +1,220 @@
 <script>
-    // Services array with multiple images for each service
-    const services = [
-      {
-        name: "Brake Caliper Restoration",
-        description: "At LB Calipers, our brake caliper restoration service is focused on enhancing the appearance of your vehicle's calipers. Over time, calipers can become corroded or dull due to exposure to road elements. We disassemble, clean, and restore each caliper, applying high-temperature paint that resists fading, peeling, and cracking. With a wide range of colors available, you can customize your calipers to complement your vehicle’s style. Each restoration is finished with a durable clear coat for long-lasting protection, ensuring your calipers look fresh for years to come.",
-        images: ["/images/lambo-brakes-yellow.png", "/images/cyber-red.jpg", "/images/porshe-green.jpg"]
-      },
-      {
-        name: "Custom Powder Coating",
-        description: "Our custom powder coating service offers a superior finish for wheels, calipers, and other metal cosmetic parts. Powder coating is more durable than traditional paint, providing a thick, chip-resistant layer that stands up to wear and tear. We offer a wide variety of colors and finishes, from glossy to matte, to give your vehicle a unique, custom look. The process includes cleaning and prepping the surface, applying the powder electrostatically, and curing it in a high-temperature oven for a smooth, long-lasting finish. Powder coating not only enhances aesthetics but also adds protection against rust and corrosion, keeping your vehicle looking its best.",
-        images: ["/images/porsche-gunmetal-wheels.png", "/images/porsche-glossblack-wheels.jpg", "/images/bmw-glossblack-wheels.jpg"]
-      },
-      {
-        name: "Window Tinting (Coming soon)",
-        description: "We are excited to soon offer window tinting services at LB Calipers. While we are still completing training to ensure top-quality installations, this upcoming service will enhance the look of your vehicle while providing benefits like UV protection, heat reduction, and privacy. Our window tinting process will involve precise application using high-quality films and state-of-the-art tools to ensure a perfect finish. Various tint shades will be available to suit your style and meet legal requirements. Stay tuned for the official launch of this service, where we aim to deliver the same expertise and attention to detail that we bring to our existing offerings.",
-        images: ["/images/tint-service.jpg"]
-      }
-    ];
-  
-    let activeIndex = 0;
-  
-    function cycleImages(serviceIndex) {
-      setInterval(() => {
-        services[serviceIndex].activeIndex =
-          (services[serviceIndex].activeIndex + 1) % services[serviceIndex].images.length;
-      }, 3000); // Adjust the delay here (e.g., 3000ms = 3 seconds)
-    }
-  
-    services.forEach((service, index) => {
-      service.activeIndex = 0;
-      cycleImages(index);
-    });
-  </script>
-  
-  <div class="services-section">
-    {#each services as service, index}
-      <div class="service-card">
-        <div class="image-container">
-          <img src={service.images[service.activeIndex]} alt={service.name} class="service-image" />
-        </div>
-        <div class="text-container">
-          <h2>{service.name}</h2>
-          <p class="description-label"><strong>Description</strong></p> <!-- Bold label for description -->
-          <p>{service.description}</p>
-        </div>
-      </div>
-      <div class="divider"></div> <!-- Blue divider between services -->
-    {/each}
-  
-    <!-- Book Now Button -->
-    <div class="book-now-container">
-      <a href="/public/bookings" class="btn">Book Now</a>
-    </div>
-  </div>
-  
-  <div class="divider"></div> <!-- Blue divider between services -->
+	// Sample data for images in each category
+	const calipersImages = [
+		'/images/porsche-green.jpg',
+		'/images/calipers2.jpg',
+		'/images/calipers3.jpg',
+		'/images/calipers4.jpg',
+		'/images/calipers5.jpg',
+		'/images/lambo-brakes-yellow.png',
+		'/images/calipers7.jpg',
+		'/images/calipers8.jpg',
+		'/images/calipers9.jpg',
+		'/images/calipers10.jpg',
+		'/images/calipers11.jpg',
+		'/images/calipers12.jpg',
+		'/images/calipers13.jpg',
+		'/images/calipers14.jpg',
+		'/images/calipers15.jpg'
+	];
 
+	const wheelsImages = [
+		'/images/wheel1.jpg',
+		'/images/porsche-gunmetal-wheels.png',
+		'/images/wheel3.jpg',
+		'/images/wheel4.jpg',
+		'/images/bmw-glossblack-wheels.jpg',
+		'/images/wheel6.jpg',
+		'/images/wheel7.jpg',
+		'/images/wheel8.jpg',
+		'/images/wheel9.jpg',
+		'/images/wheel10.jpg',
+		'/images/wheel11.jpg',
+		'/images/wheel12.jpg',
+		'/images/wheel13.jpg'
+	];
 
-  <style>
+	let activeCaliperIndex = 0;
+	let activeWheelIndex = 0;
 
-  .services-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 5rem;
-}
+	function nextImage(category) {
+		if (category === 'calipers') {
+			activeCaliperIndex = (activeCaliperIndex + 1) % calipersImages.length;
+		} else if (category === 'wheels') {
+			activeWheelIndex = (activeWheelIndex + 1) % wheelsImages.length;
+		}
+	}
 
-.service-card {
-  display: flex;
-  justify-content: center; /* Center both the image and text */
-  align-items: center;
-  border: 2px solid #52c4f5;
-  padding: 2rem;
-  border-radius: 8px;
-  background-color: black;
-  color: rgb(255, 255, 252);
-  flex-wrap: wrap;
-  gap: 1rem; /* Add gap between the image and text */
-}
+	function prevImage(category) {
+		if (category === 'calipers') {
+			activeCaliperIndex = (activeCaliperIndex - 1 + calipersImages.length) % calipersImages.length;
+		} else if (category === 'wheels') {
+			activeWheelIndex = (activeWheelIndex - 1 + wheelsImages.length) % wheelsImages.length;
+		}
+	}
 
-.service-image {
-  width: 70%; /* Keep images smaller to make more room */
-  max-width: 350px;
-  height: auto;
-  border-radius: 10px;
-}
+	function setMainImage(index, category) {
+		if (category === 'calipers') {
+			activeCaliperIndex = index;
+		} else if (category === 'wheels') {
+			activeWheelIndex = index;
+		}
+	}
+</script>
 
-.text-container {
-  width: 50%; /* Ensure text and image remain balanced */
-  padding-left: .1rem; /* Reduced padding to minimize space */
-}
+<div class="gallery-container">
+	<!-- Calipers Section -->
+	<section class="gallery-section">
+		<h2>Caliper Showcase</h2>
+		<p>
+			Calipers will be sanded down, washed, scuffed and air-brushed using high-temp ceramic paint.
+		</p>
 
-h2 {
-  font-size: 2.2rem;
-  color: #52c4f5;
-  margin-bottom: 0.5rem;
-}
+		<div class="carousel">
+			<button class="arrow" on:click={() => prevImage('calipers')}>&#9664;</button>
 
-.description-label {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
+			<img src={calipersImages[activeCaliperIndex]} alt="Caliper Image" class="main-image" />
 
-p {
-  margin-top: 0;
-}
+			<button class="arrow" on:click={() => nextImage('calipers')}>&#9654;</button>
+		</div>
 
-.divider {
-  width: 100%;
-  border-bottom: 2px solid #66CCFF;
-  margin-top: .45rem;
-  align-items: center;
-}
+		<div class="thumbnails">
+			{#each calipersImages as img, index}
+				<img
+					src={img}
+					alt="Caliper Thumbnail"
+					class:selected={index === activeCaliperIndex}
+					on:click={() => setMainImage(index, 'calipers')}
+				/>
+			{/each}
+		</div>
+	</section>
 
-.book-now-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
+	<!-- Wheels Section -->
+	<section class="gallery-section">
+		<h2>Wheel Showcase</h2>
+		<p>
+			Powder coating is a high-end procedure we do on your wheels. Providing a durable,
+			chip-resistant finish that protects against rust and corrosion.
+		</p>
 
-.btn {
-  padding: 1rem 2rem;
-  background-color: #52c4f5;
-  color: black;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
+		<div class="carousel">
+			<button class="arrow" on:click={() => prevImage('wheels')}>&#9664;</button>
 
-.btn:hover {
-  background-color: black;
-  color: #52c4f5;
-  border: 1.5px solid #52c4f5;
-}
+			<img src={wheelsImages[activeWheelIndex]} alt="Wheel Image" class="main-image" />
+
+			<button class="arrow" on:click={() => nextImage('wheels')}>&#9654;</button>
+		</div>
+
+		<div class="thumbnails">
+			{#each wheelsImages as img, index}
+				<img
+					src={img}
+					alt="Wheel Thumbnail"
+					class:selected={index === activeWheelIndex}
+					on:click={() => setMainImage(index, 'wheels')}
+				/>
+			{/each}
+		</div>
+	</section>
+
+	<!-- Book Now Button -->
+	<div class="book-now-container">
+		<a href="/public/bookings" class="btn">Book Now</a>
+	</div>
+</div>
+
+<style>
+	.gallery-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4rem;
+	}
+
+	.gallery-section {
+		text-align: center;
+		color: white;
+		margin-bottom: 3rem;
+	}
+
+	.carousel {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.main-image {
+		width: 450px;
+		height: auto;
+		border-radius: 10px;
+		border: 3px solid #66ccff;
+		object-fit: cover;
+	}
+
+	.arrow {
+		position: absolute;
+		top: 50%;
+		background: rgba(0, 0, 0, 0.6);
+		color: white;
+		border: none;
+		cursor: pointer;
+		font-size: 2rem;
+		padding: 0.5rem 1rem;
+		transform: translateY(-50%);
+	}
+
+	.arrow:hover {
+		background: rgba(0, 0, 0, 0.8);
+	}
+
+	.arrow:first-of-type {
+		left: 0;
+	}
+
+	.arrow:last-of-type {
+		right: 0;
+	}
+
+	.thumbnails {
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		padding: 1rem 0;
+	}
+
+	.thumbnails img {
+		width: 80px;
+		height: auto;
+		cursor: pointer;
+		border: 2px solid transparent;
+		border-radius: 5px;
+	}
+
+	.thumbnails img.selected {
+		border-color: #66ccff;
+	}
+
+	.book-now-container {
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+
+	.btn {
+		padding: 1rem 2rem;
+		background-color: #52c4f5;
+		color: black;
+		text-decoration: none;
+		border-radius: 4px;
+		font-weight: bold;
+		transition: background-color 0.3s ease;
+	}
+
+	.btn:hover {
+		background-color: black;
+		color: #52c4f5;
+		border: 1.5px solid #52c4f5;
+	}
 </style>

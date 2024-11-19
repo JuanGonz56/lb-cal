@@ -1,19 +1,34 @@
 <script>
-  import { goto } from '$app/navigation';
+  import { auth } from '$lib/auth'; // Import Firebase or your authentication setup
+  import { onMount } from 'svelte';
+
+  let email = '';
+  let password = '';
+
+  async function login() {
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      // Redirect to admin dashboard or inquiries page after successful login
+      window.location.href = '/admin/inquiries';
+    } catch (error) {
+      console.error("Login failed", error.message);
+    }
+  }
 </script>
+
 <main>
-
-<h1>This page should only be viewable by users with useradmin role</h1>
-
-<h1>(These are Firebase users, not users from the database)</h1>
-
-<button on:click={() => goto("/useradmin/manageUserRoles")}>Manage User Roles</button>
-<button on:click={() => goto("/useradmin/listusers")}>List Users</button>
-
+  <h1>Admin Login</h1>
+  <form on:submit|preventDefault={login}>
+    <label>Email</label>
+    <input type="email" bind:value={email} required />
+    
+    <label>Password</label>
+    <input type="password" bind:value={password} required />
+    
+    <button type="submit">Login</button>
+  </form>
 </main>
 
 <style>
-  main {
-    background-color: #f8fae6;
-  }
+  /* Add some basic styling here */
 </style>
