@@ -14,7 +14,7 @@
     {
       name: "Caliper Restoration",
       description: "At LB Calipers, our brake restoration service is focused on enhancing the appearance of your vehicle's calipers. Over time, calipers can become corroded or dull due to exposure to road elements. We disassemble, clean, and restore each caliper, applying high-temperature paint that resists fading, peeling, and cracking. With a wide range of colors available, you can customize your calipers to complement your vehicle’s style. Each restoration is finished with a durable clear coat for long-lasting protection, ensuring your calipers look fresh for years to come.",
-      images: ["/images/lambo-brakes-yellow.png", "/images/cyber-red.jpg", "/images/porshe-green.jpg"]
+      images: ["/images/lambo-brakes-yellow.png", "/images/cyber-red.jpg", "/images/porsche-green.jpg"]
     },
     {
       name: "Custom Powder Coating",

@@ -94,11 +94,9 @@
           <td>{inquiry.additional_details}</td>
           <td>
 
-            <form action=“?/handle”> <input type=hidden name=id value = "{inquiry.inquiry_id}"/>
+          <form action=“?/handle”> <input type=hidden name=id value = "{inquiry.inquiry_id}"/>
             
-              
-              
-
+  
             <button class="button">Handled</button> </form>
             <button class="button">Book</button>
           </td>

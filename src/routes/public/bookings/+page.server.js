@@ -1,36 +1,41 @@
-import sql from '$lib/server/database'; // Import your database logic
+import sql from '$lib/server/database'; // Assuming you're using a database connection
 
+// Handle the POST request for submitting a booking
 export const actions = {
-  // POST action to handle form submission
   submit: async ({ request }) => {
-    // Extract form data from the incoming request
     const data = await request.formData();
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
-    const phoneNumber = data.get('phoneNumber');
-    const serviceType = data.get('serviceType');
-    const caliperColor = data.get('caliperColor');
-    const wheelColor = data.get('wheelColor');
-    const message = data.get('message');
-    const appointmentDate = data.get('appointmentDate');
+    
+    // Get form data
+    const first_name = data.get('first_name');
+    const last_name = data.get('last_name');
+    const phone = data.get('phone');
+    const service = data.get('service');
+    const caliper_color = data.get('caliper_color');
+    const wheel_color = data.get('wheel_color');
+    const additional_details = data.get('additional_details');
+    const date = data.get('date');
 
-    // Insert the form data into the database
     try {
+      // Insert into database (adjust column names accordingly)
       await sql`
-        INSERT INTO bookings (first_name, last_name, phone, service, caliper_color, wheel_color, message, appointment_date)
-        VALUES (${firstName}, ${lastName}, ${phoneNumber}, ${serviceType}, ${caliperColor}, ${wheelColor}, ${message}, ${appointmentDate})
-      `;
+    INSERT INTO inquiries
+        (date, service, handled, first_name, last_name, phone, caliper_color, wheel_color, additional_details)
+    VALUES
+        (${date}, ${service}, ${false}, ${first_name}, ${last_name}, ${phone}, ${caliper_color}, ${wheel_color}, ${additional_details})
+`;
 
+
+      // Return success message
       return {
         success: true,
-        message: 'Booking successfully added!'
+        message: 'Booking successfully submitted!'
       };
-    } catch (error) {
-      console.error('Error saving booking:', error);
+    } catch (err) {
+      console.error('Error inserting booking:', err);
       return {
         success: false,
-        message: 'An error occurred while submitting your booking. Please try again later.'
+        message: 'Error occurred while submitting the booking.'
       };
     }
-  },
+  }
 };
