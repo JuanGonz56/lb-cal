@@ -1,4 +1,5 @@
 <script>
+  export let form;
   let first_name = '';
   let last_name = '';
   let phone = '';
@@ -12,10 +13,33 @@
   let buttonText = "Submit";
   let isValid = true;
 
-  // Dropdown options
   const services = ["Caliper Restoration", "Custom Powder Coating", "Both"];
   const caliper_colors = ["Race Red", "Blue", "Green", "Yellow", "Other"];
   const wheel_colors = ["Matte Black", "Gloss Black", "Satin Black", "Silver", "Chrome", "Other"];
+
+  
+
+  
+
+    
+
+  // Reset form after submission
+  function resetForm() {
+    first_name = '';
+    last_name = '';
+    phone = '';
+    service = '';
+    caliper_color = '';
+    wheel_color = '';
+    additional_details = '';
+    date = '';
+  }
+
+  // Button shake animation for invalid input
+  function buttonShake() {
+    isValid = false;
+    setTimeout(() => isValid = true, 500);
+  }
 </script>
 
 <section class="contact-section">
@@ -27,18 +51,20 @@
     <p><strong>Email:</strong> lbcalipers2020@gmail.com</p>
   </div>
 
-  <form action="?/submit" method="post" on:submit={handleSubmit}>
+  <!-- Booking Form -->
+   {#if form && form.message} <h1>{form.message}</h1> {/if}
+  <form action="?/submit" method="post">
     <div class="form-group">
       <label for="first_name">First Name</label>
-      <input type="text" id="first_name" name="first_name" bind:value={first_name} />
+      <input type="text" id="first_name" name="first_name" bind:value={first_name} required />
     </div>
     <div class="form-group">
       <label for="last_name">Last Name</label>
-      <input type="text" id="last_name" name="last_name" bind:value={last_name} />
+      <input type="text" id="last_name" name="last_name" bind:value={last_name} required />
     </div>
     <div class="form-group">
       <label for="phone">Phone Number</label>
-      <input type="text" id="phone" name="phone" bind:value={phone} />
+      <input type="text" id="phone" name="phone" bind:value={phone} required />
     </div>
     <div class="form-group">
       <label for="date">Appointment Date</label>
@@ -46,7 +72,7 @@
     </div>
     <div class="form-group">
       <label for="service">Service Type</label>
-      <select id="service" name="service" bind:value={service}>
+      <select id="service" name="service" bind:value={service} required>
         <option value="" disabled selected>Select a service</option>
         {#each services as service}
           <option value={service}>{service}</option>
@@ -57,7 +83,7 @@
     {#if service === "Caliper Restoration" || service === "Both"}
       <div class="form-group">
         <label for="caliper_color">Caliper Color</label>
-        <select id="caliper_color" name="caliper_color" bind:value={caliper_color}>
+        <select id="caliper_color" name="caliper_color" bind:value={caliper_color} required>
           <option value="" disabled selected>Select a caliper color</option>
           {#each caliper_colors as color}
             <option value={color}>{color}</option>
@@ -69,7 +95,7 @@
     {#if service === "Custom Powder Coating" || service === "Both"}
       <div class="form-group">
         <label for="wheel_color">Wheel Color</label>
-        <select id="wheel_color" name="wheel_color" bind:value={wheel_color}>
+        <select id="wheel_color" name="wheel_color" bind:value={wheel_color} required>
           <option value="" disabled selected>Select a wheel color</option>
           {#each wheel_colors as color}
             <option value={color}>{color}</option>
@@ -80,10 +106,10 @@
 
     <div class="form-group">
       <label for="additional_details">Additional Details</label>
-      <textarea id="additional_details" name="additional_details" bind:value={additional_details} placeholder="Please provide the current condition of your wheels/calipers here in addition to the year, make, and model of your vehicle."></textarea>
+      <textarea id="additional_details" name="additional_details" bind:value={additional_details} placeholder="Please provide the current condition of your wheels/calipers here in addition to the year, make, and model of your vehicle." ></textarea>
     </div>
 
-    <button type="submit" class="btn">{buttonText}</button>
+    <button type="submit" class="btn" class:is-invalid={!isValid}>{buttonText}</button>
   </form>
 
   {#if feedbackMessage}

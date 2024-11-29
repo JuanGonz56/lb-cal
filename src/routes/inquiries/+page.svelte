@@ -93,7 +93,7 @@
     .inquiries-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
+        margin-top: 15px;
         background-color: #f5f5f5; /* Light grey background for the table */
     }
 
