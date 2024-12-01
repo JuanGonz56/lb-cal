@@ -1,11 +1,13 @@
 import sql from '$lib/server/database';
 
-let sortby = 'inquiry_id';  // Default sorting by inquiry_id
+let sortby = 'inquiry_id'; // Default sorting by inquiry_id
+let showHandled = false; // Default to unhandled inquiries
 
-// Fetch inquiries data and apply sorting
+// Fetch inquiries data and apply sorting and handled status
 export async function load() {
+  try {
     const rows = await sql`
-    SELECT
+      SELECT
         inquiry_id,
         first_name,
         last_name,
@@ -16,25 +18,110 @@ export async function load() {
         date,
         additional_details,
         handled
-    FROM
+      FROM
         inquiries
-    ORDER BY
-        ${sql(sortby)}`;  // Dynamic sorting based on user input
-
-    console.log({rows}); // Debugging log
-
-    return { inquiries: rows };
+      WHERE
+        handled = ${showHandled}
+      ORDER BY
+        ${sql(sortby)}
+    `;
+    return { inquiries: rows, showHandled };
+  } catch (err) {
+    console.error('Error loading inquiries:', err);
+    return { inquiries: [], showHandled };
+  }
 }
 
-// Handling sorting of inquiries
+// Handle sorting, toggling handled status, and inquiry actions
 export const actions = {
-    sort: async ({ request }) => {
-        const data = await request.formData();
-        const newSort = data.get('sortby');
-        sortby = newSort; // Update the sorting order
+  sort: async ({ request }) => {
+    const data = await request.formData();
+    sortby = data.get('sortby');
+    return { success: true };
+  },
+
+  toggleHandled: async ({ request }) => {
+    const data = await request.formData();
+    showHandled = data.get('showHandled') === 'true';
+    return { success: true };
+  },
+
+  markHandled: async ({ request }) => {
+    const data = await request.formData();
+    const inquiryId = data.get('inquiry_id');
+    try {
+      await sql`
+        UPDATE inquiries
+        SET handled = TRUE
+        WHERE inquiry_id = ${inquiryId}
+      `;
+      return { success: true };
+    } catch (err) {
+      console.error('Error marking inquiry as handled:', err);
+      return { success: false };
+    }
+  },
+
+  undoHandled: async ({ request }) => {
+    const data = await request.formData();
+    const inquiryId = data.get('inquiry_id');
+    try {
+      await sql`
+        UPDATE inquiries
+        SET handled = FALSE
+        WHERE inquiry_id = ${inquiryId}
+      `;
+      return { success: true };
+    } catch (err) {
+      console.error('Error undoing inquiry handled:', err);
+      return { success: false };
+    }
+  },
+
+  deleteInquiry: async ({ request }) => {
+    const data = await request.formData();
+    const inquiryId = data.get('inquiry_id');
+    try {
+      await sql`
+        DELETE FROM inquiries
+        WHERE inquiry_id = ${inquiryId}
+      `;
+      return { success: true };
+    } catch (err) {
+      console.error('Error deleting inquiry:', err);
+      return { success: false };
+    }
+  },
+
+  // Mark inquiry as booked
+  markBooked: async ({ request }) => {
+    const data = await request.formData();
+    const inquiryId = data.get('id');
+
+    if (!inquiryId) {
+        return {
+            status: 400,
+            message: 'Inquiry ID is required to mark as booked.'
+        };
+    }
+
+    try {
+        await sql`
+            UPDATE inquiries
+            SET book_status = TRUE
+            WHERE inquiry_id = ${inquiryId}
+        `;
+
         return {
             success: true,
-            message: 'Sort order changed'
+            message: 'Inquiry marked as booked successfully.'
         };
-    },
+    } catch (err) {
+        console.error('Error marking inquiry as booked:', err);
+        return {
+            status: 500,
+            message: 'Error occurred while marking inquiry as booked.'
+        };
+    }
+}
 };
