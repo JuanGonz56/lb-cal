@@ -93,35 +93,19 @@ export const actions = {
     }
   },
 
-  // Mark inquiry as booked
   markBooked: async ({ request }) => {
     const data = await request.formData();
-    const inquiryId = data.get('id');
-
-    if (!inquiryId) {
-        return {
-            status: 400,
-            message: 'Inquiry ID is required to mark as booked.'
-        };
-    }
-
+    const inquiryId = data.get('inquiry_id');
     try {
-        await sql`
-            UPDATE inquiries
-            SET book_status = TRUE
-            WHERE inquiry_id = ${inquiryId}
-        `;
-
-        return {
-            success: true,
-            message: 'Inquiry marked as booked successfully.'
-        };
+      await sql`
+        UPDATE inquiries
+        SET book_status = TRUE
+        WHERE inquiry_id = ${inquiryId}
+      `;
+      return { success: true };
     } catch (err) {
-        console.error('Error marking inquiry as booked:', err);
-        return {
-            status: 500,
-            message: 'Error occurred while marking inquiry as booked.'
-        };
+      console.error('Error marking inquiry as booked:', err);
+      return { success: false };
     }
-}
+  },  
 };
