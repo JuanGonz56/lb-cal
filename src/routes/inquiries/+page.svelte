@@ -1,15 +1,8 @@
 <script>
     export let data; // Data from the server
   
-    let message = ''; // Success message for booked inquiries
+    let messages = []; // Array to track multiple success messages
     let loadingButtonId = null; // Tracks which button is being clicked
-  
-    // Automatically hide the success message after 10 seconds
-    $: if (message) {
-      setTimeout(() => {
-        message = '';
-      }, 10000);
-    }
   
     // Handle booking action
     async function handleBooking(inquiry_id) {
@@ -24,24 +17,33 @@
         });
   
         if (response.ok) {
-          const result = await response.json();
-          message = "Inquiry booked! Proceed to finalize booking.";
-          // Optionally, update the UI state for inquiries if data changes
-          const updatedInquiry = data.inquiries.find(i => i.inquiry_id === inquiry_id);
+          // Add a new success message to the messages array
+          const newMessage = {
+            text: `Inquiry ${inquiry_id} booked! Proceed to finalize booking.`,
+            id: Date.now(),
+          };
+          messages = [...messages, newMessage];
+  
+          // Automatically remove the message after 10 seconds
+          setTimeout(() => {
+            messages = messages.filter((message) => message.id !== newMessage.id);
+          }, 10000);
+  
+          // Update the inquiry state in the UI
+          const updatedInquiry = data.inquiries.find((i) => i.inquiry_id === inquiry_id);
           if (updatedInquiry) updatedInquiry.book_status = true;
         } else {
-          message = "Failed to book inquiry. Please try again.";
+          console.error("Failed to book inquiry");
         }
       } catch (error) {
         console.error("Error booking inquiry:", error);
-        message = "An error occurred. Please try again.";
       } finally {
         loadingButtonId = null; // Reset the loading state
       }
     }
   </script>
   
-  <h1>{data.showHandled ? "Handled Inquiries" : "Unhandled Inquiries"}</h1>
+  <h1 class="centered-title">{data.showHandled ? "Handled Inquiries" : "Unhandled Inquiries"}</h1>
   
   <!-- Sorting and Toggle Buttons -->
   <div class="sort-buttons-container">
@@ -65,14 +67,18 @@
       class="sort-button finalize-button"
       on:click={() => (window.location.href = "/finalizeBook/")}
     >
-      Finalize Book
+      Finalize Booking
     </button>
   </div>
   
-  <!-- Success Message -->
-  {#if message}
-    <div class="success-message">
-      {message}
+  <!-- Success Messages -->
+  {#if messages.length > 0}
+    <div class="messages-container">
+      {#each messages as message}
+        <div class="success-message">
+          {message.text}
+        </div>
+      {/each}
     </div>
   {/if}
   
@@ -104,10 +110,12 @@
           <td>{inquiry.additional_details}</td>
           <td>
             {#if !data.showHandled}
+              <!-- Mark Handled Button -->
               <form action="?/markHandled" method="post" style="display: inline;">
                 <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
                 <button class="action-button">Mark Handled</button>
               </form>
+              <!-- Book Button -->
               <button
                 class="action-button book-button"
                 style="background-color: {inquiry.book_status ? 'lightgray' : 'green'}; color: black;"
@@ -121,10 +129,12 @@
                   : "Book"}
               </button>
             {:else}
+              <!-- Undo Handled Button -->
               <form action="?/undoHandled" method="post" style="display: inline;">
                 <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
                 <button class="action-button">Undo</button>
               </form>
+              <!-- Delete Button -->
               <form action="?/deleteInquiry" method="post" style="display: inline;">
                 <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
                 <button class="action-button delete">Delete</button>
@@ -137,12 +147,29 @@
   </table>
   
   <style>
+    .centered-title {
+      text-align: center;
+      color: #52c4f5;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  
+    .messages-container {
+      margin: 20px auto;
+      width: fit-content;
+    }
+  
+    /*message for successful booking*/
     .success-message {
       text-align: center;
       font-size: 1.2rem;
-      margin: 15px 0;
-      color: green;
+      margin: 10px 0;
+      padding: 10px 15px;
+      background-color: rgba(0, 128, 0, 0.8); /* Green background */
+      color: rgb(0, 0, 0);
+      border-radius: 8px;
       font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
     }
   
     .sort-buttons-container {
