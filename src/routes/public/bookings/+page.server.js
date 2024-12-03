@@ -1,4 +1,4 @@
-import sql from '$lib/server/database';  // Assuming you're using a database connection
+import sql from '$lib/server/database'; // Assuming you're using a database connection
 import nodemailer from 'nodemailer'; // Email sending library
 
 // Configure nodemailer transporter
@@ -48,19 +48,22 @@ export const actions = {
       };
     }
 
-    // Insert into database (adjust column names accordingly)
     try {
-      await sql`
+      // Insert into the database and get the inquiry_id
+      const result = await sql`
         INSERT INTO inquiries
           (date, service, handled, first_name, last_name, phone, caliper_color, wheel_color, additional_details)
         VALUES
           (${date}, ${service}, ${false}, ${first_name}, ${last_name}, ${phone}, ${caliper_color || null}, ${wheel_color || null}, ${additional_details})
+        RETURNING inquiry_id
       `;
-      
+      const inquiry_id = result[0].inquiry_id;
+
+      // Create the email with the inquiry_id included
       const mailOptions = {
         from: 'gonzalez.juanant524@gmail.com', // Sender address
         to: 'gonzalez.juanant524@gmail.com', // LB Calipers email address
-        subject: 'New Booking Inquiry Received',
+        subject: `New Booking Inquiry #${inquiry_id} Received`,
         html: `
           <div style="font-family: Arial, sans-serif; color: #52c4f5; line-height: 1.8;">
             <!-- Logo -->
@@ -69,12 +72,12 @@ export const actions = {
             </div>
             <!-- Email Header -->
             <h1 style="text-align: center; font-size: 32px; font-weight: bold; color: #52c4f5; margin-bottom: 20px;">
-              New Booking Inquiry
+              New Booking Inquiry #${inquiry_id}
             </h1>
             <p style="font-size: 20px; font-weight: bold; color: #52c4f5; text-align: left;">
               Dear LB Calipers,
             </p>
-            <p style="font-size: 20px; font-weight:bold; color: #52c4f5; margin-bottom: 20px;">
+            <p style="font-size: 20px; font-weight: bold; color: #52c4f5; margin-bottom: 20px;">
               A new booking has been submitted through your website. Below are the details of the inquiry:
             </p>
             <!-- Booking Details -->
@@ -88,10 +91,10 @@ export const actions = {
               <p style="color: #52c4f5; font-size: 20px; margin: 5px 0;"><strong>Additional Details:</strong> ${additional_details || 'N/A'}</p>
             </div>
             <!-- Footer -->
-            <p style="font-size: 20px; font-weight:bold; text-align: center; color: #52c4f5; margin-top: 20px;">
+            <p style="font-size: 20px; font-weight: bold; text-align: center; color: #52c4f5; margin-top: 20px;">
               Thank you for using LB Calipers' online booking system. For any inquiries or further assistance, feel free to reach out to our team.
             </p>
-            <hr style="border: 0; font-weight:bold; border-top: 2px solid #52c4f5; margin: 30px 0;">
+            <hr style="border: 0; font-weight: bold; border-top: 2px solid #52c4f5; margin: 30px 0;">
             <p style="font-size: 16px; text-align: center; color: #999;">
               This email was generated automatically by the LB Calipers booking system. Please do not reply to this email.
             </p>
@@ -105,16 +108,14 @@ export const actions = {
           }
         ]
       };
-      
-      
-      
+
+      // Send the email
       await transporter.sendMail(mailOptions);
 
       // Return success message
       return {
         success: true,
         message: 'Booking successfully submitted! We will contact you soon to confirm your appointment!'
-       
       };
     } catch (err) {
       console.error('Error inserting booking:', err);
