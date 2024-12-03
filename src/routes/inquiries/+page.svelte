@@ -219,7 +219,7 @@
     }
   
     .inquiries-table th {
-      background-color: #333;
+      background-color: #454a4b;
       color: hsl(198, 89%, 64%);
     }
   
@@ -250,7 +250,7 @@
     }
   
     .action-button.delete {
-      background-color: #d9534f;
+      background-color: #dc2b25;
     }
   </style>
   

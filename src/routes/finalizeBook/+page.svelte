@@ -84,7 +84,7 @@
     }
   
     .inquiries-table th {
-      background-color: #333;
+      background-color: #454a4b;
       color: hsl(198, 89%, 64%);
     }
   

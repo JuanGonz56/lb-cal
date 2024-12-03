@@ -1,4 +1,16 @@
 import sql from '$lib/server/database';  // Assuming you're using a database connection
+import nodemailer from 'nodemailer'; // Email sending library
+
+// Configure nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: 'sandbox.smtp.mailtrap.io', // Replace with your SMTP server
+  port: 2525, // Replace with your SMTP port (e.g., 465 for SSL or 587 for STARTTLS)
+  secure: false, // Set to true if using SSL
+  auth: {
+    user: '97fb4de73401a0', // Replace with your SMTP username
+    pass: 'e90f423efe01e1' // Replace with your SMTP password
+  }
+});
 
 // Handle the POST request for submitting a booking
 export const actions = {
@@ -46,6 +58,23 @@ export const actions = {
         VALUES
           (${date}, ${service}, ${false}, ${first_name}, ${last_name}, ${phone}, ${caliper_color || null}, ${wheel_color || null}, ${additional_details})
       `;
+      
+       // Send email notification
+       const mailOptions = {
+        from: 'your-email@example.com', // Sender address
+        to: 'lbcalipers@example.com', // Replace with the LB Calipers email address
+        subject: 'New Booking Inquiry',
+        text: `A new booking has been submitted:
+        - Name: ${first_name} ${last_name}
+        - Phone: ${phone}
+        - Service: ${service}
+        - Date: ${date}
+        - Caliper Color: ${caliper_color || 'N/A'}
+        - Wheel Color: ${wheel_color || 'N/A'}
+        - Additional Details: ${additional_details || 'N/A'}`
+      };
+
+      await transporter.sendMail(mailOptions);
 
       // Return success message
       return {
