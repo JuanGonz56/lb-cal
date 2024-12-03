@@ -3,12 +3,10 @@ import nodemailer from 'nodemailer'; // Email sending library
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
-  host: 'sandbox.smtp.mailtrap.io', // Replace with your SMTP server
-  port: 2525, // Replace with your SMTP port (e.g., 465 for SSL or 587 for STARTTLS)
-  secure: false, // Set to true if using SSL
+  service: 'gmail',
   auth: {
-    user: '97fb4de73401a0', // Replace with your SMTP username
-    pass: 'e90f423efe01e1' // Replace with your SMTP password
+    user: 'gonzalez.juanant524@gmail.com', // Replace with your SMTP username
+    pass: 'mdzb ajac umoc hefz' // Replace with your SMTP password
   }
 });
 
@@ -61,8 +59,8 @@ export const actions = {
       
        // Send email notification
        const mailOptions = {
-        from: 'your-email@example.com', // Sender address
-        to: 'lbcalipers@example.com', // Replace with the LB Calipers email address
+        from: 'gonzalez.juanant524@gmail.com', // Sender address
+        to: 'lbcalipers2020@gmail.com', // Replace with the LB Calipers email address
         subject: 'New Booking Inquiry',
         text: `A new booking has been submitted:
         - Name: ${first_name} ${last_name}
