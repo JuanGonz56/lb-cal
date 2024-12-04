@@ -1,20 +1,76 @@
-
 <script>
     export let data; // Data passed from the server
+  
+    let messages = []; // Array to store success messages
+    let loadingButtonId = null; // Tracks which button is being clicked
+  
+    // Handle save action
+    async function handleSave(inquiry_id, quoted_price) {
+      loadingButtonId = inquiry_id; // Set the loading state for the button
+  
+      const formData = new FormData();
+      formData.append("inquiry_id", inquiry_id);
+      formData.append("quoted_price", quoted_price);
+  
+      try {
+        const response = await fetch("?/updatePrice", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (response.ok) {
+          // Add a new success message to the messages array
+          const newMessage = {
+            text: `Inquiry ${inquiry_id} saved successfully!`,
+            id: Date.now(),
+          };
+          messages = [...messages, newMessage];
+  
+          // Automatically remove the message after 10 seconds
+          setTimeout(() => {
+            messages = messages.filter((message) => message.id !== newMessage.id);
+          }, 10000);
+  
+          // Update the inquiry in the UI
+          const updatedInquiry = data.inquiries.find((i) => i.inquiry_id === inquiry_id);
+          if (updatedInquiry) updatedInquiry.quoted_price = quoted_price;
+  
+          // Keep the button as "Saved!"
+          updatedInquiry.isSaved = true;
+        } else {
+          console.error("Failed to save inquiry");
+        }
+      } catch (error) {
+        console.error("Error saving inquiry:", error);
+      } finally {
+        loadingButtonId = null; // Reset the loading state
+      }
+    }
   </script>
   
   <h1 class="centered-title">Finalize Bookings</h1>
-
+  
   <!-- Redirect Button -->
   <div class="sort-buttons-container">
-
-  <button
-  class="sort-button finalize-button"
-  on:click={() => (window.location.href = "/inquiries/")}
+    <button
+      class="sort-button finalize-button"
+      on:click={() => (window.location.href = "/inquiries/")}
     >
-  Inquiries Page
+      Inquiries Page
     </button>
   </div>
+  
+  <!-- Success Messages -->
+  {#if messages.length > 0}
+    <div class="messages-container">
+      {#each messages as message}
+        <div class="success-message">
+          {message.text}
+        </div>
+      {/each}
+    </div>
+  {/if}
+  
   <!-- Display the data in a table -->
   <table class="inquiries-table">
     <thead>
@@ -28,7 +84,6 @@
         <th>Appointment Date</th>
         <th>Additional Details</th>
         <th>Quoted Price</th>
-        
       </tr>
     </thead>
     <tbody>
@@ -43,17 +98,20 @@
           <td>{new Date(inquiry.date).toLocaleDateString()}</td>
           <td>{inquiry.additional_details || "N/A"}</td>
           <td>
-            <form method="POST" action="?/updatePrice">
-              <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
-              <input
-                type="number"
-                name="quoted_price"
-                placeholder="Enter price"
-                value={inquiry.quoted_price || ""}
-                class="price-input"
-              />
-              <button type="submit" class="action-button finalize-button">Save</button>
-            </form>
+            <input
+              type="number"
+              placeholder="Enter price"
+              value={inquiry.quoted_price || ""}
+              class="price-input"
+              on:change={(e) => (inquiry.quoted_price = e.target.value)}
+            />
+            <button
+              class="action-button finalize-button"
+              on:click={() => handleSave(inquiry.inquiry_id, inquiry.quoted_price)}
+              disabled={loadingButtonId === inquiry.inquiry_id}
+            >
+              {inquiry.isSaved ? "Saved!" : loadingButtonId === inquiry.inquiry_id ? "Saving..." : "Save"}
+            </button>
           </td>
         </tr>
       {/each}
@@ -66,6 +124,28 @@
       color: #52c4f5;
       font-size: 24px;
       margin-bottom: 20px;
+    }
+  
+    .messages-container {
+      margin-top: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column; /* Stack messages vertically */
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .success-message {
+      display: inline-block;
+      background-color: #3ee13eed; /* Green background with 50% transparency */
+      color: #000;
+      padding: 10px 15px;
+      margin: 10px 0; /* Vertical spacing between messages */
+      border-radius: 8px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      width: fit-content;
     }
   
     .inquiries-table {
@@ -98,8 +178,8 @@
   
     .action-button.finalize-button {
       padding: 5px 10px;
-      background-color: #5cb85c;
-      color: white;
+      background-color: #52c4f5;
+      color: rgb(0, 0, 0);
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -107,22 +187,17 @@
     }
   
     .action-button.finalize-button:hover {
-      background-color: #4cae4c;
+      background-color: #3ee13eed;
     }
-
+  
     .sort-buttons-container {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      align-items: flex-start;
+      align-items: center; /* Center align the button */
       margin-bottom: 20px;
     }
-
-    .finalize-button {
-      align-self: flex-end;
-      margin-top: -40px;
-    }
-
+  
     .sort-button {
       background-color: #52c4f5;
       color: black;
@@ -133,7 +208,7 @@
       font-size: 16px;
       transition: all 0.3s ease;
     }
-
+  
     .sort-button:hover {
       background-color: #454a4b;
       color: #52c4f5;

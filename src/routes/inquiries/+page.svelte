@@ -118,7 +118,7 @@
               <!-- Book Button -->
               <button
                 class="action-button book-button"
-                style="background-color: {inquiry.book_status ? 'lightgray' : 'green'}; color: black;"
+                style="background-color: {inquiry.book_status ? 'lightred' : 'neongreen'}; color: black;"
                 on:click={() => handleBooking(inquiry.inquiry_id)}
                 disabled={inquiry.book_status || loadingButtonId === inquiry.inquiry_id}
               >
@@ -165,7 +165,7 @@
       font-size: 1.2rem;
       margin: 10px 0;
       padding: 10px 15px;
-      background-color: rgba(0, 128, 0, 0.8); /* Green background */
+      background-color: #3ee13eed; /* Green background */
       color: rgb(0, 0, 0);
       border-radius: 8px;
       font-weight: bold;
@@ -241,11 +241,11 @@
     }
   
     .action-button.book-button {
-      background-color: green;
+      background-color: #3ee13eed;
     }
   
     .action-button.book-button:disabled {
-      background-color: lightgray;
+      background-color: #3ee13eed;
       cursor: not-allowed;
     }
   

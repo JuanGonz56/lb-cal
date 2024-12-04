@@ -168,6 +168,8 @@
 		<a href="/public" class="btn">Home</a>
 		<a href="/public/gallery" class="btn">Gallery</a>
 		<a href="/public/bookings" class="btn">Booking</a>
+		<a href="/inquiries" class="btn">Inquiries</a>
+
 	</div>
 
 	<!-- Scroll to Top Button -->
