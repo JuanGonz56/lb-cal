@@ -70,81 +70,85 @@
 </script>
 
 <FirebaseApp {auth} {firestore}>
-	<PageHeader {auth} />
+    <PageHeader {auth} />
 
-	{#if isPublicRoute}
-		<!-- Clickable Logo to redirect to the /public page -->
-		<div class="logo-container">
-			<a href="/public">
-				<img src={logoSrc} alt="LB Calipers Logo" />
-			</a>
-		</div>
+    <!-- Public Route Logic -->
+    {#if isPublicRoute}
+        <!-- Clickable Logo to redirect to the /public page -->
+        <div class="logo-container">
+            <a href="/public">
+                <img src={logoSrc} alt="LB Calipers Logo" />
+            </a>
+        </div>
 
-		<!-- Button Section -->
-		<div class="cta">
-			<a href="/public" class="btn">Home</a>
-			<a href="/public/gallery" class="btn">Gallery</a>
-			<a href="/public/bookings" class="btn">Booking</a>
-			<a href="/inquiries" class="btn">Inquiries</a>
-		</div>
+        <!-- Button Section -->
+        <div class="cta">
+            <a href="/public" class="btn">Home</a>
+            <a href="/public/gallery" class="btn">Gallery</a>
+            <a href="/public/bookings" class="btn">Booking</a>
+            <a href="/inquiries" class="btn">Inquiries</a>
+        </div>
 
-		<!-- Scroll to Top Button -->
-		<button
-			id="scrollTopBtn"
-			class="scroll-top-btn"
-			on:click={scrollToTop}
-		>
-			<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path
-					d="M12 19V7M5 12L12 5L19 12"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				/>
-			</svg>
-		</button>
-	{/if}
+        <!-- Scroll to Top Button -->
+        <button
+            id="scrollTopBtn"
+            class="scroll-top-btn"
+            on:click={scrollToTop}
+        >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 19V7M5 12L12 5L19 12"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+        </button>
+    {/if}
 
-	{#if currentPath === "/inquiries" || currentPath === "/finalizeBook"}
-	<SignedIn let:user>
-		<!-- Private Content -->
-		<slot />
-	</SignedIn>
-	<SignedOut>
-		<!-- Unauthorized Access Message -->
-		<div class="forbidden-container">
-			<!-- Clickable Logo -->
-			<a href="/public">
-				<img src="/images/lb-caliper-logo-2.png" alt="LB Calipers Logo" class="logo-button" />
-			</a>
-		
-			<!-- Unauthorized Access Messages -->
-			<p class="forbidden-message">This page is for authorized users only!</p>
-			<p class="redirect-message">Please Click the Logo to go back :)</p>
-		</div>
-	</SignedOut>
-{:else}
-	<slot />
-{/if}
+    <!-- Private Route Logic -->
+    {#if currentPath === "/inquirie" || currentPath === "/finalizeBoo"}
+        <SignedIn let:user>
+            <!-- Authorized Content -->
+            <slot />
+        </SignedIn>
+        <SignedOut>
+            <!-- Unauthorized Access Message -->
+            <div class="forbidden-container">
+                <!-- Clickable Logo -->
+                <a href="/public">
+                    <img src="/images/lb-caliper-logo-2.png" alt="LB Calipers Logo" class="logo-button" />
+                </a>
 
-	<!-- Footer Section with Social Media Buttons -->
-	{#if isPublicRoute}
-		<div class="footer">
-			<p>Follow us on social media:</p>
-			<div class="social-btns">
-				<a href="https://www.instagram.com/lbcalipers/" target="_blank" class="social-btn">
-					<i class="fab fa-instagram"></i> <!-- Instagram Icon -->
-				</a>
-				<a href="https://www.google.com/maps" target="_blank" class="social-btn">
-					<i class="fas fa-map-marker-alt"></i> <!-- Google Maps Icon -->
-				</a>
-			</div>
-		</div>
-	{/if}
+                <!-- Unauthorized Access Messages -->
+                <p class="forbidden-message">This page is for authorized users only!</p>
+                <p class="redirect-message">Please Click the Logo to go back :)</p>
+            </div>
+        </SignedOut>
+    {:else}
+        <!-- Default Content Slot -->
+        <slot />
+    {/if}
 
-	<PageFooter {auth} />
+    <!-- Footer Section with Social Media Buttons -->
+    {#if isPublicRoute}
+        <div class="footer">
+            <p>Follow us on social media:</p>
+            <div class="social-btns">
+                <a href="https://www.instagram.com/lbcalipers/" target="_blank" class="social-btn">
+                    <i class="fab fa-instagram"></i> <!-- Instagram Icon -->
+                </a>
+                <a href="https://www.google.com/maps" target="_blank" class="social-btn">
+                    <i class="fas fa-map-marker-alt"></i> <!-- Google Maps Icon -->
+                </a>
+            </div>
+        </div>
+    {/if}
+
+    <PageFooter {auth} />
 </FirebaseApp>
+
 
 <style>
 	/* Style for centering logo on public routes */

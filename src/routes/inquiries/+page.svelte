@@ -1,4 +1,6 @@
+
 <script>
+    import { SignedIn, SignedOut } from "sveltefire";
     export let data; // Data from the server
   
     let messages = []; // Array to track multiple success messages
@@ -42,7 +44,7 @@
       }
     }
   </script>
-  
+  <SignedIn>
   <h1 class="centered-title">{data.showHandled ? "Handled Inquiries" : "Unhandled Inquiries"}</h1>
   
   <!-- Sorting and Toggle Buttons -->
@@ -145,6 +147,9 @@
       {/each}
     </tbody>
   </table>
+</SignedIn>
+
+
   
   <style>
     .centered-title {
