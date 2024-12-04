@@ -19,6 +19,7 @@ export async function load() {
     return { inquiries: rows };
 }
 
+
 export const actions = {
 	handle: async ({ request }) => {
 		const data = await request.formData();
