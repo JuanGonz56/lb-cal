@@ -108,7 +108,7 @@
     {/if}
 
     <!-- Private Route Logic -->
-    {#if currentPath === "/inquirie" || currentPath === "/finalizeBoo"}
+    {#if currentPath === "/inquiries" || currentPath === "/finalizeBook"}
         <SignedIn let:user>
             <!-- Authorized Content -->
             <slot />

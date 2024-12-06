@@ -1,5 +1,7 @@
 <script>
   import { goto } from '$app/navigation';
+  import { SignedIn, SignedOut } from "sveltefire";
+
 </script>
 
 <h1>Sample Firebase-using Svelte App</h1>
