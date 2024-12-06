@@ -4,7 +4,7 @@
 
     // Function to redirect to the login page for authorized users
     function redirectToLogin() {
-        goto('/useradmin'); // Redirecting to the login page located under src/routes/useradmin/+page.svelte
+        goto('/login/inquiries'); // Redirecting to the login page located under src/routes/useradmin/+page.svelte
     }
 </script>
 

@@ -17,7 +17,8 @@ export async function load() {
         wheel_color,
         date,
         additional_details,
-        handled
+        handled,
+        book_status
       FROM
         inquiries
       WHERE
@@ -25,6 +26,7 @@ export async function load() {
       ORDER BY
         ${sql(sortby)}
     `;
+    console.log('Loaded inquiries:', rows); // Debugging line to ensure data fetched correctly
     return { inquiries: rows, showHandled };
   } catch (err) {
     console.error('Error loading inquiries:', err);
@@ -107,5 +109,5 @@ export const actions = {
       console.error('Error marking inquiry as booked:', err);
       return { success: false };
     }
-  },  
+  },
 };
