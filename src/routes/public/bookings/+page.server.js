@@ -23,7 +23,9 @@ export const actions = {
     const caliper_color = data.get('caliper_color');
     const wheel_color = data.get('wheel_color');
     const additional_details = data.get('additional_details');
-    const date = data.get('date');
+    const dateInput = data.get('date');
+    const date = new Date(`${dateInput}T00:00:00`).toISOString(); // Normalize date to prevent timezone shifts
+
 
     // Validate required fields
     if (!first_name || !last_name || !phone || !service || !date) {
