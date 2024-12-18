@@ -1,27 +1,58 @@
 <script>
   import { goto } from '$app/navigation';
-  import { SignedIn, SignedOut } from "sveltefire";
-
 </script>
 
-<h1>Sample Firebase-using Svelte App</h1>
+<style>
+  /* Center the content on the page */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #000000; /* Optional: dark background */
+    color: #ffffff; /* Optional: light text */
+  }
 
-<p>(This home page is publicly visible)</p>
-<p>Currently implemented: email/password</p>
+  /* Style for the welcome message */
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
 
-<p>Go to page that is publicly available.</p>
-<button on:click={() => {goto('/public')}}>/public</button>
+  /* Style for the button containing the logo */
+  .logo-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: transform 0.3s ease-in-out;
+  }
 
-<p>Go to page that is available only to logged-in users (or Admin users).</p>
-<button on:click={() => {goto('/product')}}>/product</button>
+  .logo-button:hover {
+    transform: scale(1.2);
+  }
 
-<p>Go to user profile which is available only to logged-in users.</p>
-<button on:click={() => {goto('/user/profile')}}>/user/profile</button>
+  /* Style for the logo */
+  .logo {
+    width: 200px; /* Default size */
+    display: block; /* Ensure proper spacing */
+  }
+</style>
 
-<p>Go to page that is available only to useradmin users.</p>
-<button on:click={() => {goto('/useradmin')}}>/useradmin</button>
+<div class="container">
+  <!-- Welcome Message -->
+  <h1>Welcome to LB Calipers!</h1>
 
-<p>Go to page that is available only to logged-in SUPER users.</p>
-<button on:click={() => {goto('/admin')}}>/admin</button>
-
-
+  <!-- Logo as a button that redirects to the home page -->
+  <button class="logo-button" on:click={() => goto('/public')} aria-label="Go to Home Page">
+    <img 
+      src="/images/lb-caliper-logo-2.png" 
+      alt="LB Calipers Logo" 
+      class="logo"
+    />
+  </button>
+  
+  <h1>Please click the logo to proceed.</h1>
+</div>

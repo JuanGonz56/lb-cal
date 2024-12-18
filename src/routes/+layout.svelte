@@ -134,12 +134,12 @@
     <!-- Footer Section with Social Media Buttons -->
     {#if isPublicRoute}
         <div class="footer">
-            <p>Follow us on social media:</p>
+            <p>Follow us on social media and view our location:</p>
             <div class="social-btns">
                 <a href="https://www.instagram.com/lbcalipers/" target="_blank" class="social-btn">
                     <i class="fab fa-instagram"></i> <!-- Instagram Icon -->
                 </a>
-                <a href="https://www.google.com/maps" target="_blank" class="social-btn">
+                <a href="https://www.google.com/maps/place/1501+Daisy+Ave,+Long+Beach,+CA+90813/@33.786101,-118.2023105,17z/data=!3m1!4b1!4m6!3m5!1s0x80dd315154230e05:0x1c21619d9c1c2ef8!8m2!3d33.786101!4d-118.1997356!16s%2Fg%2F11c25dcq9r?entry=ttu&g_ep=EgoyMDI0MTIwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="social-btn">
                     <i class="fas fa-map-marker-alt"></i> <!-- Google Maps Icon -->
                 </a>
             </div>
