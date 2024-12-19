@@ -1,0 +1,10 @@
+{
+	"runtime": "nodejs20.x",
+	"handler": "..\\..\\..\\..\\..\\..\\Users\\chorr\\OneDrive\\Desktop\\lb-cal\\.svelte-kit\\vercel-tmp\\index.js",
+	"launcherType": "Nodejs",
+	"experimentalResponseStreaming": true,
+	"framework": {
+		"slug": "sveltekit",
+		"version": "2.12.1"
+	}
+}
