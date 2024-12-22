@@ -1279,12 +1279,16 @@ async function render_response({
   let base$1 = base;
   let assets$1 = assets;
   let base_expression = s(base);
-  if (!state.prerendering?.fallback) {
-    const segments = event.url.pathname.slice(base.length).split("/").slice(2);
-    base$1 = segments.map(() => "..").join("/") || ".";
-    base_expression = `new URL(${s(base$1)}, location).pathname.slice(0, -1)`;
-    if (!assets || assets[0] === "/" && assets !== SVELTE_KIT_ASSETS) {
-      assets$1 = base$1;
+  {
+    if (!state.prerendering?.fallback) {
+      const segments = event.url.pathname.slice(base.length).split("/").slice(2);
+      base$1 = segments.map(() => "..").join("/") || ".";
+      base_expression = `new URL(${s(base$1)}, location).pathname.slice(0, -1)`;
+      if (!assets || assets[0] === "/" && assets !== SVELTE_KIT_ASSETS) {
+        assets$1 = base$1;
+      }
+    } else if (options2.hash_routing) {
+      base_expression = "new URL('.', location).pathname.slice(0, -1)";
     }
   }
   if (page_config.ssr) {
@@ -1337,7 +1341,7 @@ async function render_response({
       for (const url of node.imports) modulepreloads.add(url);
       for (const url of node.stylesheets) stylesheets.add(url);
       for (const url of node.fonts) fonts.add(url);
-      if (node.inline_styles) {
+      if (node.inline_styles && !client.inline) {
         Object.entries(await node.inline_styles()).forEach(([k, v]) => inline_styles.set(k, v));
       }
     }
@@ -1355,6 +1359,10 @@ async function render_response({
     }
     return `${assets$1}/${path}`;
   };
+  if (client.inline?.style) {
+    head += `
+	<style>${client.inline.style}</style>`;
+  }
   if (inline_styles.size > 0) {
     const content = Array.from(inline_styles.values()).join("\n");
     const attributes = [];
@@ -1410,17 +1418,19 @@ async function render_response({
     if (client.uses_env_dynamic_public && state.prerendering) {
       modulepreloads.add(`${options2.app_dir}/env.js`);
     }
-    const included_modulepreloads = Array.from(modulepreloads, (dep) => prefixed(dep)).filter(
-      (path) => resolve_opts.preload({ type: "js", path })
-    );
-    for (const path of included_modulepreloads) {
-      link_header_preloads.add(`<${encodeURI(path)}>; rel="modulepreload"; nopush`);
-      if (options2.preload_strategy !== "modulepreload") {
-        head += `
+    if (!client.inline) {
+      const included_modulepreloads = Array.from(modulepreloads, (dep) => prefixed(dep)).filter(
+        (path) => resolve_opts.preload({ type: "js", path })
+      );
+      for (const path of included_modulepreloads) {
+        link_header_preloads.add(`<${encodeURI(path)}>; rel="modulepreload"; nopush`);
+        if (options2.preload_strategy !== "modulepreload") {
+          head += `
 		<link rel="preload" as="script" crossorigin="anonymous" href="${path}">`;
-      } else if (state.prerendering) {
-        head += `
+        } else if (state.prerendering) {
+          head += `
 		<link rel="modulepreload" href="${path}">`;
+        }
       }
     }
     const blocks = [];
@@ -1454,7 +1464,7 @@ async function render_response({
     blocks.push(`${global} = {
 						${properties.join(",\n						")}
 					};`);
-    const args = ["app", "element"];
+    const args = ["element"];
     blocks.push("const element = document.currentScript.parentElement;");
     if (page_config.ssr) {
       const serialized = { form: "null", error: "null" };
@@ -1487,24 +1497,24 @@ ${indent}	${hydrate.join(`,
 ${indent}	`)}
 ${indent}}`);
     }
+    const boot = client.inline ? `${client.inline.script}
+
+					__sveltekit_${options2.version_hash}.app.start(${args.join(", ")});` : client.app ? `Promise.all([
+						import(${s(prefixed(client.start))}),
+						import(${s(prefixed(client.app))})
+					]).then(([kit, app]) => {
+						kit.start(app, ${args.join(", ")});
+					});` : `import(${s(prefixed(client.start))}).then((app) => {
+						app.start(${args.join(", ")})
+					});`;
     if (load_env_eagerly) {
       blocks.push(`import(${s(`${base$1}/${options2.app_dir}/env.js`)}).then(({ env }) => {
 						${global}.env = env;
 
-						Promise.all([
-							import(${s(prefixed(client.start))}),
-							import(${s(prefixed(client.app))})
-						]).then(([kit, app]) => {
-							kit.start(${args.join(", ")});
-						});
+						${boot.replace(/\n/g, "\n	")}
 					});`);
     } else {
-      blocks.push(`Promise.all([
-						import(${s(prefixed(client.start))}),
-						import(${s(prefixed(client.app))})
-					]).then(([kit, app]) => {
-						kit.start(${args.join(", ")});
-					});`);
+      blocks.push(boot);
     }
     if (options2.service_worker) {
       const opts = "";
@@ -2554,6 +2564,9 @@ async function respond(request, options2, manifest, state) {
       return text(csrf_error.body.message, { status: csrf_error.status });
     }
   }
+  if (options2.hash_routing && url.pathname !== base + "/" && url.pathname !== "/[fallback]") {
+    return text("Not found", { status: 404 });
+  }
   let rerouted_path;
   try {
     rerouted_path = options2.hooks.reroute({ url: new URL(url) }) ?? url.pathname;
@@ -2830,7 +2843,7 @@ async function respond(request, options2, manifest, state) {
           preload: opts.preload || default_preload
         };
       }
-      if (state.prerendering?.fallback) {
+      if (options2.hash_routing || state.prerendering?.fallback) {
         return await render_response({
           event: event2,
           options: options2,

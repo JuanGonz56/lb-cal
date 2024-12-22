@@ -1,14 +1,18 @@
-import mkcert from "vite-plugin-mkcert"
+import { defineConfig } from 'vite'; // Import defineConfig
 import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
-
+import path from 'path';
 
 export default defineConfig({
-	plugins: [sveltekit(),
-		mkcert()
-	],
-	server: {
-		https: true,
-		proxy: {}, // essential to avoid "can't use Symbol where you need a string" error
-	},
-})
+    plugins: [sveltekit()], // Use the SvelteKit plugin
+    server: {
+        port: 5173, // Specify the port (default is 5173)
+        fs: {
+            allow: ['.'], // Restrict file system access to the project directory
+        },
+    },
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'), // Optional alias for cleaner imports
+        },
+    },
+});

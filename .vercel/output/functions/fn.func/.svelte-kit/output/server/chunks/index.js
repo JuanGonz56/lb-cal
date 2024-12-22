@@ -89,15 +89,11 @@ function text(body, init) {
     headers
   });
 }
-function fail(status, data) {
-  return new ActionFailure(status, data);
-}
 export {
   ActionFailure as A,
   HttpError as H,
   Redirect as R,
   SvelteKitError as S,
-  fail as f,
   json as j,
   redirect as r,
   text as t

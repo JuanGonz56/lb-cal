@@ -72,18 +72,19 @@
 
 		<div class="carousel">
 			<button class="arrow" on:click={() => prevImage('calipers')}>&#9664;</button>
-			<img src={calipersImages[activeCaliperIndex]} alt="Caliper Image" class="main-image" />
+			<img src={calipersImages[activeCaliperIndex]} alt="Caliper Image {activeCaliperIndex + 1}" class="main-image" />
 			<button class="arrow" on:click={() => nextImage('calipers')}>&#9654;</button>
 		</div>
 
 		<div class="thumbnails">
 			{#each calipersImages as img, index}
-				<img
-					src={img}
-					alt="Caliper Thumbnail"
+				<button
+					type="button"
 					class:selected={index === activeCaliperIndex}
 					on:click={() => setMainImage(index, 'calipers')}
-				/>
+				>
+					<img src={img} alt="Caliper Thumbnail {index + 1}" />
+				</button>
 			{/each}
 		</div>
 	</section>
@@ -98,18 +99,19 @@
 
 		<div class="carousel">
 			<button class="arrow" on:click={() => prevImage('wheels')}>&#9664;</button>
-			<img src={wheelsImages[activeWheelIndex]} alt="Wheel Image" class="main-image" />
+			<img src={wheelsImages[activeWheelIndex]} alt="Wheel Image {activeWheelIndex + 1}" class="main-image" />
 			<button class="arrow" on:click={() => nextImage('wheels')}>&#9654;</button>
 		</div>
 
 		<div class="thumbnails">
 			{#each wheelsImages as img, index}
-				<img
-					src={img}
-					alt="Wheel Thumbnail"
+				<button
+					type="button"
 					class:selected={index === activeWheelIndex}
 					on:click={() => setMainImage(index, 'wheels')}
-				/>
+				>
+					<img src={img} alt="Wheel Thumbnail {index + 1}" />
+				</button>
 			{/each}
 		</div>
 	</section>
@@ -181,16 +183,22 @@
 		padding: 1rem 0;
 	}
 
+	.thumbnails button {
+		border: none;
+		padding: 0;
+		background: none;
+	}
+
 	.thumbnails img {
 		width: 80px;
 		height: 80px;
 		cursor: pointer;
-		border: 2px solid transparent;
+		border: 3px solid transparent;
 		border-radius: 5px;
 		object-fit: cover;
 	}
 
-	.thumbnails img.selected {
+	.thumbnails button.selected img {
 		border-color: #52c4f5;
 	}
 

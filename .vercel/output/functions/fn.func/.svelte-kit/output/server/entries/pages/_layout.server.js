@@ -1,9 +1,17 @@
-import { r as roles_from_user } from "../../chunks/roles_from_user.js";
 import { S as SUPERUSER_ROLE } from "../../chunks/private.js";
 import { getAuth } from "firebase-admin/auth";
 import { f as firebaseServerApp } from "../../chunks/firebaseServerApp.js";
-import { s as sanitized } from "../../chunks/sanitized_user_record.js";
 import { r as redirect } from "../../chunks/index.js";
+const roles_from_user = (userRec) => {
+  if (!userRec || !userRec.customClaims) {
+    return [];
+  }
+  const allRoles = Object.keys(userRec.customClaims);
+  const appRoles = allRoles.filter((role) => role.startsWith("approle_"));
+  const enabledRoles = appRoles.filter((role) => userRec.customClaims[role]);
+  const roles = enabledRoles.map((role) => role.replace("approle_", ""));
+  return roles;
+};
 const path_to_role_map = /* @__PURE__ */ new Map([
   [new RegExp(/^[/]admin([/]|$)/), SUPERUSER_ROLE],
   [new RegExp(/^[/]user([/]|$)/), "user"],
@@ -19,6 +27,16 @@ const user_can_access_url = (user_record, url) => {
   const [stem] = [...path_to_role_map.keys()].filter((aStem) => aStem.test(url.pathname));
   const result = !stem || user_supplied && roles.includes(path_to_role_map.get(stem));
   return result;
+};
+const sanitized = (userRec) => {
+  if (!userRec) {
+    return {};
+  }
+  const newRec = { ...userRec };
+  "providerData,metadata,tenantId,tokensValidAfterTime,passwordHash,passwordSalt".split(",").map((key) => {
+    delete newRec[key];
+  });
+  return newRec;
 };
 const user_data_from_session = async (sessionCookie) => {
   if (!sessionCookie) {

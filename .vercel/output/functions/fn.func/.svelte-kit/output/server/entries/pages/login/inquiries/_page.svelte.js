@@ -1,4 +1,4 @@
-import { c as create_ssr_component, a as add_attribute, e as escape } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, d as add_attribute, e as escape } from "../../../../chunks/ssr.js";
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { a as PUBLIC_FIREBASE_API_KEY, b as PUBLIC_FIREBASE_AUTH_DOMAIN, P as PUBLIC_FIREBASE_PROJECT_ID, c as PUBLIC_FIREBASE_STORAGE_BUCKET, d as PUBLIC_FIREBASE_MESSAGING_SENDER_ID, e as PUBLIC_FIREBASE_APP_ID } from "../../../../chunks/public.js";

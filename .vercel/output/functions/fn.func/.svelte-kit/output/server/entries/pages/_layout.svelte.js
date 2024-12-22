@@ -1,15 +1,59 @@
-import { c as create_ssr_component, v as validate_store, s as subscribe, f as setContext, g as getContext, h as validate_component, a as add_attribute } from "../../chunks/ssr.js";
-import "../../chunks/client.js";
-import { a as auth } from "../../chunks/auth.js";
+import { c as create_ssr_component, v as validate_store, a as subscribe, f as setContext, g as getContext, h as validate_component, d as add_attribute } from "../../chunks/ssr.js";
+import { i as invalidateAll } from "../../chunks/client.js";
+import { r as readable, w as writable } from "../../chunks/index2.js";
 import { p as page } from "../../chunks/stores.js";
 import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { w as writable } from "../../chunks/index2.js";
 import "firebase/storage";
 import "firebase/analytics";
 import "firebase/database";
 import { initializeApp } from "firebase/app";
 import { a as PUBLIC_FIREBASE_API_KEY, b as PUBLIC_FIREBASE_AUTH_DOMAIN, P as PUBLIC_FIREBASE_PROJECT_ID, c as PUBLIC_FIREBASE_STORAGE_BUCKET, d as PUBLIC_FIREBASE_MESSAGING_SENDER_ID, e as PUBLIC_FIREBASE_APP_ID } from "../../chunks/public.js";
+function createAuth() {
+  let auth2;
+  const { subscribe: subscribe2 } = readable(void 0, (set) => {
+    let unsubscribe = () => {
+    };
+    async function init() {
+    }
+    init();
+    return unsubscribe;
+  });
+  async function sign_in() {
+    const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
+    await signInWithPopup(auth2, new GoogleAuthProvider());
+    const csrfToken = "?";
+    const idToken = await auth2.currentUser.getIdToken();
+    await fetch("/api/sessionLogin", {
+      body: JSON.stringify({ idToken, csrfToken }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    auth2.currentUser.getIdToken(true);
+    invalidateAll();
+  }
+  async function sign_out() {
+    const csrfToken = "?";
+    const { signOut: signOut2 } = await import("firebase/auth");
+    await signOut2(auth2);
+    await fetch("/api/sessionLogout", {
+      body: JSON.stringify({ csrfToken }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    invalidateAll();
+  }
+  return {
+    subscribe: subscribe2,
+    sign_in,
+    sign_out
+  };
+}
+const auth = createAuth();
 const PageHeader = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $auth, $$unsubscribe_auth;
   validate_store(auth, "auth");

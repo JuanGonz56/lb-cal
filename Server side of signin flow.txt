@@ -16,7 +16,7 @@ POST->handle_user_logging_in: handle_user_logging_in
 
 opt application userid NOT present in claims
 
-note over handle_user_logging_in: create user;\ndetermine if first user?\nYOU WRITE THIS
+note over handle_user_logging_in: create user;/ndetermine if first user?/nYOU WRITE THIS
 
 note over handle_user_logging_in: add app user id as claim
 note over handle_user_logging_in: add user claim
@@ -36,6 +36,6 @@ POST->FBA: createSessionCookie
 FBA->POST: sessionCookie
 
 
-POST->cookies: set "session" to\nsessionCookie
+POST->cookies: set "session" to/nsessionCookie
 
-POST->Client: 200 OK\n(cookie set)
+POST->Client: 200 OK/n(cookie set)
