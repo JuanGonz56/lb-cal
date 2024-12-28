@@ -2,8 +2,11 @@ import adapter from '@sveltejs/adapter-vercel';
 
 export default {
 	kit: {
-		adapter: adapter({
+		adapter: adapter(),
+		alias: {
+			'@':'src'
+		},
 			// see below for options that can be set here
-		})
-	}
+		
+	},
 };

@@ -12,7 +12,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'src'), // Optional alias for cleaner imports
+            '@': path.resolve(__dirname, 'src').replace(/\\/g, "/"), // Optional alias for cleaner imports
         },
     },
 });
