@@ -1,6 +1,7 @@
 # LB Calipers Booking Platform
 
-![LB Calipers Logo](image.png)
+![image](https://github.com/user-attachments/assets/27bac2aa-9de9-4bd6-9805-7fe7f1d08a2a)
+
 
 Welcome to the LB Calipers Booking Platform! This project is a streamlined web-based solution designed to modernize and enhance the booking and management of automotive aesthetic services, such as custom caliper painting, wheel powder coating, and window tinting.
 
