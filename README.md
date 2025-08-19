@@ -1,142 +1,88 @@
-# Firebase + Svelte
+# LB Calipers Booking Platform
 
-A starter pack. Svelte 4.2.7. Vite 5.0.3, Postgres 16
-
-## Overview
-
-A framework you can add to an existing Svelte project and get page-level protections using Firebase.
-
-***The site runs as https by default, even as a development server.*** *(configure this in ```vite.config.js```)*
-
-It comes with two roles (user, admin) out of the box
-
-Grants are based on the route URL. See ```src/lib/server/path_to_role_map.js``` for config. (In other words you can protect routes starting with "/")
-
-It comes with three protected routes (/admin, /user, /useradmin). Note that /useradmin is protected by a role "useradmin" that doesn't [exist or] need to be granted because "admin" has access to all routes (superuser mode)
-
-All users are granted the "NEW_USER_ROLE" (from ```.env```) at first login.
-
-The first user to log in is granted "SUPERUSER_ROLE" (from ```.env```), making them an admin
-
-***You are not obligated to keep the default roles or routes. They are all configurable.***
-
-## Wait, what?
-
-OK, so you probably want to restrict access to parts of your site. Maybe you have an "admin" area, maybe there are things you have to be logged in to see.
-
-Maybe users have profiles!
-
-* What are the parts of the site that need protection?
-* What group/role can see them?
-
-That's all!
-
-## Steps
-
-* git clone [this](https://github.com/bjmckenz/fire0)
-* * Change the name of the project in ```package.json```
-* * Change the git origin to your account/name in ```.git/config```
-* create your ```.env``` file *(below)*
-* ```npm install```
-* Implement **Installing and setting up a Pg Database** section (below)
-* modify ```src/lib/server/path_to_role_map.js``` to protect paths, moving routes as necessary
-* See ```src/routes/user/profile/+page.js``` to see how you access the logged-in user's id.
-* ```npm run dev```
-
-# .env
-
-Your Firebase config goes in this file. Set up a Firebase project, add/enable authentication, and eventually it'll give you these params:
-
-```
-PUBLIC_FIREBASE_API_KEY=BLAHBLAHBLAH
-PUBLIC_FIREBASE_AUTH_DOMAIN=MUMBLE.firebaseapp.com
-PUBLIC_FIREBASE_PROJECT_ID=MUMBLE
-PUBLIC_FIREBASE_STORAGE_BUCKET=MUMBLE.appspot.com
-PUBLIC_FIREBASE_MESSAGING_SENDER_ID=BLIVIT
-PUBLIC_FIREBASE_APP_ID=JABBERWOCKY
-FIREBASE_ADMIN_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nTwas brillig, and the slithy toves - Did gyre and gimble in the wabe: All mimsy were the borogoves, And the mome raths outgrabe.\n-----END PRIVATE KEY-----\n"
-FIREBASE_ADMIN_CLIENT_EMAIL=BLURT@MUMBLE.iam.gserviceaccount.com
-```
-
-Create a file ```.env``` at the project root with all of those ***and the following lines:***
-
-```
-NODE_ENV=development
-SUPERUSER_ROLE=admin
-NEW_USER_ROLE=user
-```
-
-If you are using Postgres, add:
-
-```
-PGCONNECT=postgres://bjmckenz@localhost:5432/containers
-```
-
-* Substitute at least your name, and perhaps where your DB is installed.
-
-* If you want to see what is going on with authentication and users, add:
-
-```
-DEBUG_AUTH=true
-```
-
-These are your development params.
-
-***DO NOT CHECK THIS FILE INTO GIT/GITHUB***
-
-# Installing and setting up a Pg Database
-
-2. Install PostgreSQL on your computer, or sign up for a hosted instance
-* * If you are on Windows, install chocolatey.org, then ```choco install postgres```
-* * ** SAVE THE GENERATED PASSWORD from then PS window **
-* * If you are on Mac, install Postgres.app
+![image](https://github.com/user-attachments/assets/27bac2aa-9de9-4bd6-9805-7fe7f1d08a2a)
 
 
-1. Create a database (e.g., 'containers')
+Welcome to the LB Calipers Booking Platform! This project is a streamlined web-based solution designed to modernize and enhance the booking and management of automotive aesthetic services, such as custom caliper painting, wheel powder coating, and window tinting.
 
-2. Make sure the ```.env``` file mentioned above is set up correctly.
+## 🚗 About the Project
 
-3. Consider installing the "PostgreSQL" VSCode extension by Weijan Chen so you can investigate the DB.
+LB Calipers is a family-run business in Long Beach, California, specializing in high-quality automotive aesthetic services. This platform was developed to address challenges such as overbooking and manual appointment management by providing a professional and intuitive online booking system.
 
-4. Open a PSQL window and paste in the schema (from ```schema.sql```) in it.
-* * If you have installed the extension above, click the terminal icon shown here
-* ![opening psql](opening_psql.png){ width=10% }
+The platform leverages modern web technologies to offer a seamless experience for both clients and workers:
 
+- **Frontend**: Built using SvelteKit for a responsive and dynamic user interface.
+- **Backend**: Powered by Node.js with serverless functions for efficient processing.
+- **Database**: PostgreSQL to manage booking details and client inquiries.
+- **Authentication**: Secure user login and role-based access using Firebase.
 
-## DB Design and Requirements
+## 🌟 Features
 
-The DB must have a way to associate "internal" ids, Firebase uids, user names, and email addresses.
+### For Clients
+- **Dynamic Calendar Booking**: Easily schedule appointments based on availability.
+- **Service Customization**: Choose your preferred service options, such as caliper or wheel colors.
+- **Responsive Design**: Access the platform seamlessly across all devices.
 
-The user record is looked up by Firebase uid, and the internal id is made available to the app.
+### For Workers
+- **Administrative Dashboard**: Manage client inquiries, view bookings, and finalize appointments.
+- **Inquiry Management**: Mark requests as handled or move them to the booking pipeline.
+- **Booking Finalization**: Set prices and confirm bookings with ease.
+- **EMAIL CONFIRMATION**: When a booking is submitted, an email confirmation with the clients' requests will be sent to the lb-calipers email.
+- **Data Security**: Protect sensitive client data with robust encryption and secure routes.
 
-That's about it. Granted user roles are stored in the Firebase customClaims, not in the application or DB.
+## 🚀 Getting Started
 
-# So what are roles, anyways?
+### Prerequisites
+Ensure you have the following installed on your system:
+- Node.js
+- PostgreSQL
 
-Just a string. In this code, the strings in ```src/lib/server/path_to_role_map.js``` are the role names:
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/JuanGonz56/lb-cal.git
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd lb-cal
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Set up environment variables:
+   - Create a `.env` file and configure your Firebase, PostgreSQL, and other required settings.
+5. Run the application:
+   ```bash
+   npm run dev
+   ```
+## 📈 Roadmap
 
-```js
-[new RegExp(/^[/]product([/]|$)/), 'user'],
-```
+### Version 1.0
+- Public Pages: Home, Gallery, Booking.
+- Private Pages: Admin Dashboard, Inquiry Management, Booking Finalization.
 
-says that accounts must be granted "user" to access "/product..." URLs.
+### Future Updates
+- **Calendar Integration**: A full-featured calendar for appointment management.
+- **Analytics Dashboard**: Track bookings and performance metrics.
+- **Mobile App**: Extend platform access via a dedicated mobile application.
+- **Payment Gateway**: Enable secure online payments.
 
-You can check that users have a role by calling ```user_roles(userid}.includes('moderator')``` for example.
+## 🛠 Technologies Used
+- **Frontend**: SvelteKit, CSS
+- **Backend**: Node.js, Firebase
+- **Database**: PostgreSQL
+- **Hosting**: Vercel
 
-They don't have to be used for paths if you don't want them to by.
+## 🎯 Goals and Metrics
+This project aims to:
+- Improve operational efficiency for the LB Calipers team.
+- Enhance customer satisfaction with a professional booking experience.
+- Measure success via user feedback, system reliability, and time savings.
 
-# Limitations
+## 📬 Contact
+For more information, visit our [GitHub Repository](https://github.com/JuanGonz56/lb-cal) or visit the live platform at [LB Calipers](https://lb-cal.vercel.app/public) or reach out to us directly.
 
-* notion of "user" role seems like it means "can log in" but it's not. It's just a role.
-* I like [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.en). Should add that everywhere.
+---
 
-# BUGS? ISSUES?
-
-* Please add them to Github issues for this project.
-
-# Most Useful Links
-
-* (#1 by a mile) https://www.captaincodeman.com/lazy-loading-firebase-with-sveltekit
-* https://firebase.google.com/docs/auth/admin/custom-claims
-* https://www.okupter.com/blog/client-side-authentication-firebase-sveltekit
-* https://www.poetryfoundation.org/poems/42916/jabberwocky
+Thank you for checking out the LB Calipers Booking Platform!
