@@ -2,6 +2,7 @@ import sql from '$lib/server/database'; // Assuming you're using a database conn
 import nodemailer from 'nodemailer'; // Email sending library
 import path from 'path'; // Import the built-in path module
 import fs from 'fs'; // Import the file system module
+import { fileURLToPath } from 'url'; // Import fileURLToPath from the url module
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -62,13 +63,17 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // Construct the absolute file path to the image
-            const imagePath = path.resolve('./static/images/lb-caliper-logo-2.png');
-
+            // Define the base path, which is the root of the project.
+            const projectRoot = path.resolve(fileURLToPath(import.meta.url), '../../../../');
+            const imagePath = path.join(projectRoot, 'static', 'images', 'lb-caliper-logo-2.png');
+            
             // Check if the image file exists before trying to attach it
             if (!fs.existsSync(imagePath)) {
                 console.error('Error: Image file not found at:', imagePath);
-                // Continue without the attachment to allow the rest of the code to work
+                return {
+                    success: false,
+                    message: 'Error: The image for the email could not be found.'
+                };
             }
 
             // Create the email with the inquiry_id included
@@ -115,7 +120,7 @@ export const actions = {
                 attachments: [
                     {
                         filename: 'lb-caliper-logo-2.png',
-                        path: imagePath, // Use the absolute path
+                        path: imagePath, // Use the new, robust absolute path
                         cid: 'lbcaliperlogo'
                     }
                 ]
@@ -138,3 +143,4 @@ export const actions = {
         }
     }
 };
+
