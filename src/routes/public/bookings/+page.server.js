@@ -105,7 +105,7 @@ export const actions = {
         attachments: [
           {
             filename: 'lb-caliper-logo-2.png', // File name for the image
-            path: 'static/images/lb-caliper-logo-2.png', // Path to the image in your project
+            path: '/images/lb-caliper-logo-2.png', // Path to the image in your project
             cid: 'lbcaliperlogo' // Content ID for embedding the image in the email
           }
         ]
