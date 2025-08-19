@@ -287,4 +287,49 @@
   .overlay-text:hover .overlay {
     background-color: rgba(0, 0, 0, 0.65); /* Darken the overlay on hover */
   }
+
+   /* --- Mobile-Specific Styles for Home Page --- */
+  @media (max-width: 768px) {
+    .video-container {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .video {
+      width: 100%;
+      height: auto;
+    }
+
+    .services-section {
+      padding: 1rem;
+    }
+
+    .service-card {
+      flex-direction: column;
+    }
+
+    .service-image {
+      width: 100%;
+    }
+
+    .text-container {
+      width: 100%;
+      padding: 0 1rem;
+      text-align: center;
+    }
+
+    .image-container {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .image-box {
+      width: 90%;
+    }
+    
+    .image-box img {
+      width: 100%;
+    }
+    
+  }
 </style>

@@ -131,9 +131,12 @@
 	}
 
 	.gallery-section {
-		text-align: center;
-		color: white;
-		margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
 	}
 
 	.carousel {
@@ -141,10 +144,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		width: 100%;
+		max-width: 600px
 	}
 
 	.main-image {
-		width: 450px;
+		width: 100%;
+		max-width: 450px;
 		height: auto;
 		border-radius: 10px;
 		border: 3px solid #52c4f5;
@@ -161,6 +167,7 @@
 		font-size: 2rem;
 		padding: 0.5rem 1rem;
 		transform: translateY(-50%);
+		z-index: 10;
 	}
 
 	.arrow:hover {
@@ -181,6 +188,7 @@
 		gap: 0.5rem;
 		overflow-x: auto;
 		padding: 1rem 0;
+		max-width: 100%;
 	}
 
 	.thumbnails button {
