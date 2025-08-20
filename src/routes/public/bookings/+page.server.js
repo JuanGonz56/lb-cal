@@ -1,51 +1,73 @@
-import sql from '$lib/server/database'; // Assuming you're using a database connection
-import nodemailer from 'nodemailer'; // Email sending library
-import path from 'path'; // Import the built-in path module
-import fs from 'fs'; // Import the file system module
-import { fileURLToPath } from 'url'; // Import fileURLToPath from the url module
+import sql from '$lib/server/database';
+import nodemailer from 'nodemailer';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
-// Configure nodemailer transporter
+// Important: It's best practice to use environment variables for sensitive data.
+// You should store your email username and password in a .env file and access them like this.
+// For example, in your .env file:
+// EMAIL_USER="gonzalez.juanant524@gmail.com"
+// EMAIL_PASS="your_app_specific_password"
+// Then, you would import them from your private environment variables.
+// import { EMAIL_USER, EMAIL_PASS } from '$env/static/private';
+
+// Configure nodemailer transporter using best practices.
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'gonzalez.juanant524@gmail.com', // Replace with your SMTP username
-        pass: 'mdzb ajac umoc hefz' // Replace with your SMTP password
+        user: 'gonzalez.juanant524@gmail.com',
+        pass: 'mdzb ajac umoc hefz' // IMPORTANT: Replace this with an environment variable!
     }
 });
 
-// Handle the POST request for submitting a booking
+// Handle the POST request for submitting a booking.
 export const actions = {
     submit: async ({ request }) => {
         const data = await request.formData();
 
-        // Get form data
-        const first_name = data.get('first_name');
-        const last_name = data.get('last_name');
-        const phone = data.get('phone');
-        const service = data.get('service');
-        const caliper_color = data.get('caliper_color');
-        const wheel_color = data.get('wheel_color');
-        const additional_details = data.get('additional_details');
-        const dateInput = data.get('date');
-        const date = new Date(`${dateInput}T00:00:00`).toISOString(); // Normalize date to prevent timezone shifts
+        // Use object destructuring for cleaner data extraction.
+        const {
+            first_name,
+            last_name,
+            phone,
+            service,
+            caliper_color,
+            wheel_color,
+            additional_details,
+            date: dateInput
+        } = Object.fromEntries(data);
 
-        // Validate required fields
-        if (!first_name || !last_name || !phone || !service || !date) {
-            return {
-                status: 400,
-                message: 'Please fill out all required fields.'
-            };
+        const date = new Date(`${dateInput}T00:00:00`).toISOString();
+
+        // Use a single, more concise validation block.
+        const requiredFields = [
+            'first_name',
+            'last_name',
+            'phone',
+            'service',
+            'date'
+        ];
+        for (const field of requiredFields) {
+            if (!data.get(field)) {
+                return {
+                    status: 400,
+                    message: 'Please fill out all required fields.'
+                };
+            }
         }
 
-        // Check if caliper or wheel color needs to be selected
-        if ((service === "Caliper Restoration" || service === "Both") && !caliper_color) {
+        // Combine validation for specific services.
+        const requiresCaliperColor = service === "Caliper Restoration" || service === "Both";
+        if (requiresCaliperColor && !caliper_color) {
             return {
                 status: 400,
                 message: 'Please select a caliper color.'
             };
         }
 
-        if ((service === "Custom Powder Coating" || service === "Both") && !wheel_color) {
+        const requiresWheelColor = service === "Custom Powder Coating" || service === "Both";
+        if (requiresWheelColor && !wheel_color) {
             return {
                 status: 400,
                 message: 'Please select a wheel color.'
@@ -53,7 +75,7 @@ export const actions = {
         }
 
         try {
-            // Insert into the database and get the inquiry_id
+            // Insert into the database and get the inquiry_id.
             const result = await sql`
                 INSERT INTO inquiries
                   (date, service, handled, first_name, last_name, phone, caliper_color, wheel_color, additional_details)
@@ -63,23 +85,22 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // Define the base path, which is the root of the project.
-            const projectRoot = path.resolve(fileURLToPath(import.meta.url), '../../../../');
-            const imagePath = path.join(projectRoot, 'static', 'images', 'lb-caliper-logo-2.png');
+            // Use process.cwd() for a more reliable path to the project root.
+            const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
             
-            // Check if the image file exists before trying to attach it
+            // Check if the image file exists before trying to attach it.
             if (!fs.existsSync(imagePath)) {
                 console.error('Error: Image file not found at:', imagePath);
                 return {
                     success: false,
-                    message: 'Error: The image for the email could not be found.'
+                    message: `Error: The image for the email could not be found. Path checked: ${imagePath}`
                 };
             }
 
-            // Create the email with the inquiry_id included
+            // Create the email with the inquiry_id included.
             const mailOptions = {
-                from: 'gonzalez.juanant524@gmail.com', // Sender address
-                to: 'gonzalez.juanant524@gmail.com', // LB Calipers email address
+                from: 'gonzalez.juanant524@gmail.com',
+                to: 'gonzalez.juanant524@gmail.com',
                 subject: `New Booking Inquiry #${inquiry_id} Received`,
                 html: `
                     <div style="font-family: Arial, sans-serif; color: #52c4f5; line-height: 1.8;">
@@ -120,16 +141,16 @@ export const actions = {
                 attachments: [
                     {
                         filename: 'lb-caliper-logo-2.png',
-                        path: imagePath, // Use the new, robust absolute path
+                        path: imagePath,
                         cid: 'lbcaliperlogo'
                     }
                 ]
             };
 
-            // Send the email
+            // Send the email.
             await transporter.sendMail(mailOptions);
 
-            // Return success message
+            // Return a success message.
             return {
                 success: true,
                 message: 'Booking successfully submitted! We will contact you soon to confirm your appointment!'
