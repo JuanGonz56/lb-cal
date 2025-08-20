@@ -3,6 +3,8 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import { EMAIL_PASS } from '$env/static/private'; // Import the environment variable
+
 
 // Important: It's best practice to use environment variables for sensitive data.
 // You should store your email username and password in a .env file and access them like this.
@@ -17,7 +19,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'gonzalez.juanant524@gmail.com',
-        pass: 'mdzb ajac umoc hefz' // IMPORTANT: Replace this with an environment variable!
+        pass: EMAIL_PASS // IMPORTANT: Replace this with an environment variable!
     }
 });
 
