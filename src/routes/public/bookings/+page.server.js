@@ -74,9 +74,13 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // This is the updated path logic. It uses process.cwd() which is more reliable.
-            const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
-            
+            // Old code (caused a file not found error on Vercel)
+            // const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
+
+            // New, corrected code
+            const projectRoot = process.cwd();
+            const imagePath = path.join(projectRoot, 'static', 'images', 'lb-caliper-logo-2.png');
+
             if (!fs.existsSync(imagePath)) {
                 console.error('Error: Image file not found at:', imagePath);
                 return {
