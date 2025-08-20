@@ -134,7 +134,15 @@ export const actions = {
                 ]
             };
 
-            await transporter.sendMail(mailOptions);
+            // Removed the 'await' keyword here
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Nodemailer Error:', error);
+                    // No need to return a value here, as the client is not waiting for this response
+                } else {
+                    console.log('Email sent:', info.response);
+                }
+            });
 
             return {
                 success: true,
