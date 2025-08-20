@@ -2,7 +2,6 @@ import sql from '$lib/server/database';
 import nodemailer from 'nodemailer';
 import path from 'path';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import { EMAIL_PASS } from '$env/static/private';
 
 // Configure nodemailer transporter using best practices.
@@ -74,14 +73,14 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // Old code (caused a file not found error on Vercel)
-            // const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
-
-            // New, corrected code
-            const projectRoot = process.cwd();
-            const imagePath = path.join(projectRoot, 'static', 'images', 'lb-caliper-logo-2.png');
-
-            if (!fs.existsSync(imagePath)) {
+            // This is the most reliable way to build a path on Vercel and locally.
+            const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
+            
+            // Read the file content into a buffer.
+            let imageBuffer;
+            try {
+                imageBuffer = fs.readFileSync(imagePath);
+            } catch (readError) {
                 console.error('Error: Image file not found at:', imagePath);
                 return {
                     success: false,
@@ -128,17 +127,15 @@ export const actions = {
                 attachments: [
                     {
                         filename: 'lb-caliper-logo-2.png',
-                        path: imagePath,
+                        content: imageBuffer,
                         cid: 'lbcaliperlogo'
                     }
                 ]
             };
 
-            // Removed the 'await' keyword here
-            transporter.sendMail(mailOptions, (error, info) => {
+            await transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.error('Nodemailer Error:', error);
-                    // No need to return a value here, as the client is not waiting for this response
                 } else {
                     console.log('Email sent:', info.response);
                 }
