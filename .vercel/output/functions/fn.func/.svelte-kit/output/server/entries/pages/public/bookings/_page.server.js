@@ -2,11 +2,12 @@ import { s as sql } from "../../../../chunks/database.js";
 import nodemailer from "nodemailer";
 import path from "path";
 import fs from "fs";
+import { E as EMAIL_PASS } from "../../../../chunks/private.js";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "gonzalez.juanant524@gmail.com",
-    pass: "mdzb ajac umoc hefz"
+    pass: EMAIL_PASS
     // IMPORTANT: Replace this with an environment variable!
   }
 });

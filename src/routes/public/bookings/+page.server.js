@@ -3,23 +3,14 @@ import nodemailer from 'nodemailer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { EMAIL_PASS } from '$env/static/private'; // Import the environment variable
-
-
-// Important: It's best practice to use environment variables for sensitive data.
-// You should store your email username and password in a .env file and access them like this.
-// For example, in your .env file:
-// EMAIL_USER="gonzalez.juanant524@gmail.com"
-// EMAIL_PASS="your_app_specific_password"
-// Then, you would import them from your private environment variables.
-// import { EMAIL_USER, EMAIL_PASS } from '$env/static/private';
+import { EMAIL_PASS } from '$env/static/private';
 
 // Configure nodemailer transporter using best practices.
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'gonzalez.juanant524@gmail.com',
-        pass: EMAIL_PASS // IMPORTANT: Replace this with an environment variable!
+        pass: EMAIL_PASS
     }
 });
 
@@ -28,7 +19,6 @@ export const actions = {
     submit: async ({ request }) => {
         const data = await request.formData();
 
-        // Use object destructuring for cleaner data extraction.
         const {
             first_name,
             last_name,
@@ -42,7 +32,6 @@ export const actions = {
 
         const date = new Date(`${dateInput}T00:00:00`).toISOString();
 
-        // Use a single, more concise validation block.
         const requiredFields = [
             'first_name',
             'last_name',
@@ -59,7 +48,6 @@ export const actions = {
             }
         }
 
-        // Combine validation for specific services.
         const requiresCaliperColor = service === "Caliper Restoration" || service === "Both";
         if (requiresCaliperColor && !caliper_color) {
             return {
@@ -77,7 +65,6 @@ export const actions = {
         }
 
         try {
-            // Insert into the database and get the inquiry_id.
             const result = await sql`
                 INSERT INTO inquiries
                   (date, service, handled, first_name, last_name, phone, caliper_color, wheel_color, additional_details)
@@ -87,10 +74,9 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // Use process.cwd() for a more reliable path to the project root.
+            // This is the updated path logic. It uses process.cwd() which is more reliable.
             const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
             
-            // Check if the image file exists before trying to attach it.
             if (!fs.existsSync(imagePath)) {
                 console.error('Error: Image file not found at:', imagePath);
                 return {
@@ -99,18 +85,15 @@ export const actions = {
                 };
             }
 
-            // Create the email with the inquiry_id included.
             const mailOptions = {
                 from: 'gonzalez.juanant524@gmail.com',
                 to: 'gonzalez.juanant524@gmail.com',
                 subject: `New Booking Inquiry #${inquiry_id} Received`,
                 html: `
                     <div style="font-family: Arial, sans-serif; color: #52c4f5; line-height: 1.8;">
-                        <!-- Logo -->
                         <div style="text-align: center; margin-bottom: 20px;">
                             <img src="cid:lbcaliperlogo" alt="LB Calipers Logo" style="max-width: 200px;">
                         </div>
-                        <!-- Email Header -->
                         <h1 style="text-align: center; font-size: 32px; font-weight: bold; color: #52c4f5; margin-bottom: 20px;">
                             New Booking Inquiry #${inquiry_id}
                         </h1>
@@ -120,7 +103,6 @@ export const actions = {
                         <p style="font-size: 20px; font-weight: bold; color: #52c4f5; margin-bottom: 20px;">
                             A new booking has been submitted through your website. Below are the details of the inquiry:
                         </p>
-                        <!-- Booking Details -->
                         <div style="background: #454a4b; padding: 20px; border: 2px solid #52c4f5; border-radius: 10px; margin: 20px 0;">
                             <p style="color: #52c4f5; font-size: 20px; margin: 5px 0;"><strong>Client Name:</strong> ${first_name} ${last_name}</p>
                             <p style="color: #52c4f5; font-size: 20px; margin: 5px 0;"><strong>Phone Number:</strong> ${phone}</p>
@@ -130,7 +112,6 @@ export const actions = {
                             <p style="color: #52c4f5; font-size: 20px; margin: 5px 0;"><strong>Wheel Color:</strong> ${wheel_color || 'N/A'}</p>
                             <p style="color: #52c4f5; font-size: 20px; margin: 5px 0;"><strong>Additional Details:</strong> ${additional_details || 'N/A'}</p>
                         </div>
-                        <!-- Footer -->
                         <p style="font-size: 20px; font-weight: bold; text-align: center; color: #52c4f5; margin-top: 20px;">
                             Thank you for using LB Calipers' online booking system. For any inquiries or further assistance, feel free to reach out to our team.
                         </p>
@@ -149,10 +130,8 @@ export const actions = {
                 ]
             };
 
-            // Send the email.
             await transporter.sendMail(mailOptions);
 
-            // Return a success message.
             return {
                 success: true,
                 message: 'Booking successfully submitted! We will contact you soon to confirm your appointment!'

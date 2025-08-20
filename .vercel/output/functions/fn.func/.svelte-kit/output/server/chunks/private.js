@@ -3,7 +3,9 @@ const FIREBASE_ADMIN_CLIENT_EMAIL = "firebase-adminsdk-vbeto@lb-calipers.iam.gse
 const SUPERUSER_ROLE = "true";
 const NEW_USER_ROLE = "true";
 const PGCONNECT = "postgresql://neondb_owner:npg_mduHwxM2h7rZ@ep-snowy-darkness-addoch1c-pooler.c-2.us-east-1.aws.neon.tech/lb_calipers_import?sslmode=require&channel_binding=require";
+const EMAIL_PASS = "mdzb ajac umoc hefz";
 export {
+  EMAIL_PASS as E,
   FIREBASE_ADMIN_PRIVATE_KEY as F,
   NEW_USER_ROLE as N,
   PGCONNECT as P,
