@@ -1,4 +1,3 @@
-
 <script>
   // Backend or configuration-provided dimming value (0 = no dim, 1 = full dim)
   let dimmingValue = 0.6; // Set the desired default dimming value here (e.g., 0.6 = 60% dim)
@@ -13,7 +12,7 @@
   const services = [
     {
       name: "Caliper Restoration",
-      description: "At LB Calipers, our brake restoration service is focused on enhancing the appearance of your vehicle's calipers. Over time, calipers can become corroded or dull due to exposure to road elements. We disassemble, clean, and restore each caliper, applying high-temperature paint that resists fading, peeling, and cracking. With a wide range of colors available, you can customize your calipers to complement your vehicle’s style. Each restoration is finished with a durable clear coat for long-lasting protection, ensuring your calipers look fresh for years to come.",
+      description: "At LB Calipers, our brake restoration service is focused on enhancing the appearance of your vehicle's calipers. Over time, calipers can become corroded or dull due to exposure to road elements. We disassemble, clean, and restore each caliper, applying high-temperature paint that resists fading, peeling, and cracking. With a wide range of colors available, you can customize your calipers to complement your vehicle's style. Each restoration is finished with a durable clear coat for long-lasting protection, ensuring your calipers look fresh for years to come.",
       images: ["/images/lambo-brakes-yellow.png", "/images/cyber-red.jpg", "/images/porsche-green.jpg"]
     },
     {
@@ -52,15 +51,15 @@
 
   <!-- Video Section with three videos side-by-side -->
   <div class="video-container">
-    <video class="video" autoplay muted loop>
+    <video class="video" autoplay muted loop playsinline>
       <source src="/videos/jailbreak-cinematic.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <video class="video" autoplay muted loop>
+    <video class="video" autoplay muted loop playsinline>
       <source src="/videos/calipers-showcase-home.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
-    <video class="video" autoplay muted loop>
+    <video class="video" autoplay muted loop playsinline>
       <source src="/videos/yellow-lambo-home-mp.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -81,7 +80,7 @@
   <div class="services-section">
     {#each services as service, index}
       <div class="service-card">
-        <div class="image-container">
+        <div class="image-container-service">
           <img src={service.images[service.activeIndex]} alt={service.name} class="service-image" />
         </div>
         <div class="text-container">
@@ -106,7 +105,7 @@
    <div class="divider"></div>
 
   <!-- Side-by-Side Containers for Images with Text Overlay -->
-  <div class="image-container">
+  <div class="cta-container">
     <!-- Left Image (Services, inverted to face the right) -->
     <div class="image-box">
       <a href="/public/gallery">
@@ -141,6 +140,16 @@
   .home {
     padding: 2rem;
     text-align: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
   }
 
   /* Divider Styling */
@@ -157,10 +166,11 @@
     align-items: center;
     gap: 1rem;
     margin-top: 1rem;
+    width: 100%;
   }
 
   .video {
-    width: 25%;
+    width: 32%;
     height: auto;
     aspect-ratio: 9 / 16;
     border: 3px solid #66CCFF;
@@ -173,6 +183,12 @@
     margin-top: 2rem;
     font-size: 1.2rem;
     text-align: center;
+    padding: 0 1rem;
+  }
+
+  .message-container p {
+    word-wrap: break-word;
+    line-height: 1.5;
   }
 
   /* Services Section */
@@ -180,7 +196,9 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    padding: 5rem;
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .service-card {
@@ -188,30 +206,41 @@
     justify-content: center;
     align-items: center;
     border: 2px solid #52c4f5;
-    padding: .25rem;
+    padding: 1rem;
     border-radius: 8px;
     background-color: black;
     color: #fff;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .image-container-service {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
   }
 
   .service-image {
-    width: 70%;
-    max-width: 350px;
+    width: 100%;
     height: auto;
-    border-radius: 0px;
+    border-radius: 8px;
   }
 
   .text-container {
-    width: 50%;
-    padding-left: 0.5rem;
+    flex: 1;
+    min-width: 250px;
+    padding: 0 1rem;
   }
 
   h2 {
-    font-size: 2.2rem;
+    font-size: 2rem;
     color: #52c4f5;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
   }
 
   /* Button styling for View Gallery */
@@ -221,9 +250,10 @@
     background-color: #52c4f5;
     color: black;
     text-decoration: none;
-    border-radius: 0px;
+    border-radius: 4px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
   }
 
   .btn:hover {
@@ -233,26 +263,31 @@
   }
 
   /* Side-by-Side Image Containers */
-  .image-container {
+  .cta-container {
      margin-top: 2rem;
      display: flex;
      justify-content: space-around;
      align-items: center;
+     gap: 2rem;
+     width: 100%;
+     flex-wrap: wrap;
   }
 
   .image-box {
      width: 45%;
+     min-width: 250px;
      text-align: center;
      position: relative;
   }
 
   /* Image Styling */
   .image-box img {
-     width: 50%;
+     width: 100%;
+     max-width: 400px;
      height: auto;
      border-radius: 10px;
      transition: transform 0.3s ease;
-     border: 5px solid rgb(112, 33, 214); /* Purple border around images */
+     border: 5px solid rgb(112, 33, 214);
   }
 
   /* Invert the left image (Services) horizontally */
@@ -263,6 +298,8 @@
   /* Overlay and Text Styling */
   .overlay-text {
     position: relative;
+    display: inline-block;
+    width: 100%;
   }
 
   .overlay {
@@ -274,62 +311,144 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    background-color: rgba(0, 0, 0, 0.5);
     color: rgb(112, 33, 214);
     font-size: 2rem;
     font-weight: bold;
-    opacity: 1; /* Always visible */
+    opacity: 1;
     transition: opacity 0.3s ease;
     border-radius: 10px;
   }
 
-  /* Keep text visible but apply hover effect */
-  .overlay-text:hover .overlay {
-    background-color: rgba(0, 0, 0, 0.65); /* Darken the overlay on hover */
+  .overlay p {
+    margin: 0;
+    padding: 1rem;
   }
 
-   /* --- Mobile-Specific Styles for Home Page --- */
+  /* Keep text visible but apply hover effect */
+  .overlay-text:hover .overlay {
+    background-color: rgba(0, 0, 0, 0.65);
+  }
+
+  /* --- Mobile-Specific Styles for Home Page --- */
   @media (max-width: 768px) {
+    .home {
+      padding: 1rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      padding: 0 0.5rem;
+    }
+
+    .divider {
+      margin: 1.5rem auto;
+    }
+
     .video-container {
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
     }
 
     .video {
       width: 100%;
-      height: auto;
+      max-width: 400px;
+      border-width: 2px;
+    }
+
+    .message-container {
+      font-size: 1rem;
+      margin-top: 1rem;
+      padding: 0 0.5rem;
     }
 
     .services-section {
-      padding: 1rem;
+      padding: 1rem 0.5rem;
+      gap: 1.5rem;
     }
 
     .service-card {
       flex-direction: column;
+      padding: 1rem 0.75rem;
+      gap: 1rem;
+    }
+
+    .image-container-service {
+      width: 100%;
+      max-width: 100%;
     }
 
     .service-image {
       width: 100%;
+      max-width: 350px;
     }
 
     .text-container {
       width: 100%;
-      padding: 0 1rem;
+      padding: 0;
       text-align: center;
     }
 
-    .image-container {
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .text-container p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .btn {
+      padding: 0.65rem 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .cta-container {
       flex-direction: column;
       gap: 2rem;
+      margin-top: 1rem;
     }
 
     .image-box {
       width: 90%;
+      max-width: 350px;
     }
     
     .image-box img {
       width: 100%;
+      border-width: 3px;
     }
-    
+
+    .overlay {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.4rem;
+    }
+
+    .message-container {
+      font-size: 0.9rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    .text-container p {
+      font-size: 0.85rem;
+    }
+
+    .overlay {
+      font-size: 1.25rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
   }
 </style>
