@@ -339,16 +339,13 @@
 	}
 
 	.cta {
-		gap: 0.5rem;
+		gap: 0.4rem;
 		margin-top: 1rem;
 	}
 
 	.cta a {
-		padding: 0.65rem 1rem;
+		padding: 0.75rem 0.75rem;
 		font-size: 0.85rem;
-		flex: 1 1 calc(50% - 0.5rem);
-		min-width: 120px;
-		text-align: center;
 	}
 
 	.forbidden-message {
