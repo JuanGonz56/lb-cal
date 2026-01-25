@@ -152,166 +152,213 @@
 
 <style>
 	/* Style for centering logo on public routes */
-	.logo-container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: 1rem 0;
-		background-color: black; /* Adjust this if needed */
-	}
+.logo-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1rem 0;
+	background-color: black;
+}
 
-	.logo-container img {
-		max-width: 200px;
-		height: auto;
-		cursor: pointer;
-		transition: transform 0.3s ease;
-	}
+.logo-container img {
+	max-width: 200px;
+	height: auto;
+	cursor: pointer;
+	transition: transform 0.3s ease;
+}
 
-	.logo-container img:hover {
-		transform: scale(1.3);
-	}
+.logo-container img:hover {
+	transform: scale(1.3);
+}
 
-	.cta {
-		margin-top: 1.5rem;
-		display: flex;
-		justify-content: center;
-		gap: 1rem;
-	}
+.cta {
+	margin-top: 1.5rem;
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+	padding: 0 1rem;
+}
 
-	.cta a {
-		padding: 1rem 2rem;
-		background-color: #52c4f5;
-		color: black;
-		text-decoration: none;
-		border-radius: 4px;
-		font-weight: bold;
-		transition: background-color 0.3s ease;
-	}
+.cta a {
+	padding: 1rem 2rem;
+	background-color: #52c4f5;
+	color: black;
+	text-decoration: none;
+	border-radius: 4px;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+}
 
-	.cta a:hover {
-		background-color: black;
-		color: #66CCFF;
-		border: 1.5px solid #52c4f5;
-	}
+.cta a:hover {
+	background-color: black;
+	color: #66CCFF;
+	border: 1.5px solid #52c4f5;
+}
 
-	.footer {
-		text-align: center;
-		padding: 1rem 0;
-		background-color: black;
-		color: white;
-	}
+.footer {
+	text-align: center;
+	padding: 1rem 0;
+	background-color: black;
+	color: white;
+}
 
-	.footer .social-btns {
-		display: flex;
-		justify-content: center;
-		gap: 1rem;
-		margin-top: 1rem;
-	}
+.footer .social-btns {
+	display: flex;
+	justify-content: center;
+	gap: 1rem;
+	margin-top: 1rem;
+}
 
-	.footer .social-btn {
-		width: 60px;
-		height: 60px;
-		background-color: #52c4f5;
-		color: black;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.2rem;
-		transition: background-color 0.3s ease, transform 0.3s ease;
-	}
+.footer .social-btn {
+	width: 60px;
+	height: 60px;
+	background-color: #52c4f5;
+	color: black;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.2rem;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
-	.footer .social-btn:hover {
-		background-color: black;
-		color: #52c4f5;
-		transform: rotate(360deg);
-		border: 1.5px solid #52c4f5;
-	}
+.footer .social-btn:hover {
+	background-color: black;
+	color: #52c4f5;
+	transform: rotate(360deg);
+	border: 1.5px solid #52c4f5;
+}
 
-	.scroll-top-btn {
-		position: fixed;
-		bottom: 20px;
-		right: 20px;
-		width: 50px;
-		height: 50px;
-		background-color: #52c4f5;
-		color: black;
-		border-radius: 50%;
-		border: none;
-		cursor: pointer;
-		display: none;
-		justify-content: center;
-		align-items: center;
-		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-		transition: background-color 0.3s ease, transform 0.3s ease;
-	}
+.scroll-top-btn {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	width: 50px;
+	height: 50px;
+	background-color: #52c4f5;
+	color: black;
+	border-radius: 50%;
+	border: none;
+	cursor: pointer;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	transition: background-color 0.3s ease, transform 0.3s ease;
+}
 
-	.scroll-top-btn:hover {
-		background-color: black;
-		color: #52c4f5;
-		transform: scale(1.2);
-		border: 1.5px solid #52c4f5;
-	}
+.scroll-top-btn:hover {
+	background-color: black;
+	color: #52c4f5;
+	transform: scale(1.2);
+	border: 1.5px solid #52c4f5;
+}
 
-	.scroll-top-btn svg {
-		width: 24px;
-		height: 24px;
-		transform: translateX(-2.5px);
-	}
+.scroll-top-btn svg {
+	width: 24px;
+	height: 24px;
+	transform: translateX(-2.5px);
+}
 
-	/* Center the content on the page */
-	.forbidden-container {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		height: 100vh;
-		background-color: #000000; /* Dark background for contrast */
-		color: #f5f5f5; /* Light text for readability */
-	}
+/* Center the content on the page */
+.forbidden-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: 100vh;
+	background-color: #000000;
+	color: #f5f5f5;
+}
 
-	/* Style the logo */
-	.forbidden-container img {
-		max-width: 200px;
-		height: auto;
-		margin-bottom: 20px;
-	}
+/* Style the logo */
+.forbidden-container img {
+	max-width: 200px;
+	height: auto;
+	margin-bottom: 20px;
+}
 
-	/* Style the message */
-	.forbidden-message {
-		font-size: 24px;
-		font-weight: bold;
-		color: #52c4f5; /* Match the branding color */
-		margin: 0;
-		padding: 0 20px;
-	}
+/* Style the message */
+.forbidden-message {
+	font-size: 24px;
+	font-weight: bold;
+	color: #52c4f5;
+	margin: 0;
+	padding: 0 20px;
+}
 
-	/* Styling for the Logo Button */
+/* Styling for the Logo Button */
 .logo-button {
-    max-width: 200px;
-    height: auto;
-    cursor: pointer;
-    transition: transform 0.3s ease; /* Smooth hover effect */
-    margin-bottom: 15px;
+	max-width: 200px;
+	height: auto;
+	cursor: pointer;
+	transition: transform 0.3s ease;
+	margin-bottom: 15px;
 }
 
 .logo-button:hover {
-    transform: scale(1.3); /* Enlarge on hover */
+	transform: scale(1.3);
 }
 
 /* Styling for the Messages */
 .forbidden-message {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #52c4f5; /* LB Calipers Blue */
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+	color: #52c4f5;
 }
 
 .redirect-message {
-    font-size: 16px;
-    color: #66ccff; /* Lighter shade of blue */
-    margin-top: 5px;
+	font-size: 16px;
+	color: #66ccff;
+	margin-top: 5px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+	.logo-container img {
+		max-width: 150px;
+	}
+
+	.cta {
+		gap: 0.75rem;
+		padding: 0 0.5rem;
+	}
+
+	.cta a {
+		padding: 0.75rem 1.25rem;
+		font-size: 0.9rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.logo-container img {
+		max-width: 120px;
+	}
+
+	.cta {
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.cta a {
+		padding: 0.65rem 1rem;
+		font-size: 0.85rem;
+		flex: 1 1 calc(50% - 0.5rem);
+		min-width: 120px;
+		text-align: center;
+	}
+
+	.forbidden-message {
+		font-size: 18px;
+		padding: 0 1rem;
+	}
+
+	.redirect-message {
+		font-size: 14px;
+		padding: 0 1rem;
+	}
 }
 </style>
-
