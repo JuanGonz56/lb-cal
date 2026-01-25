@@ -1,7 +1,5 @@
 import sql from '$lib/server/database';
 import nodemailer from 'nodemailer';
-import path from 'path';
-import fs from 'fs';
 import { EMAIL_PASS } from '$env/static/private';
 
 // Configure nodemailer transporter using best practices.
@@ -73,20 +71,8 @@ export const actions = {
             `;
             const inquiry_id = result[0].inquiry_id;
 
-            // This is the most reliable way to build a path on Vercel and locally.
-            const imagePath = path.join(process.cwd(), 'static', 'images', 'lb-caliper-logo-2.png');
-            
-            // Read the file content into a buffer.
-            let imageBuffer;
-            try {
-                imageBuffer = fs.readFileSync(imagePath);
-            } catch (readError) {
-                console.error('Error: Image file not found at:', imagePath);
-                return {
-                    success: false,
-                    message: `Error: The image for the email could not be found. Path checked: ${imagePath}`
-                };
-            }
+            // Use hosted image URL instead of local file
+            const logoUrl = 'https://lb-calipers.web.app/images/lb-caliper-logo-2.png';
 
             const mailOptions = {
                 from: 'gonzalez.juanant524@gmail.com',
@@ -95,7 +81,7 @@ export const actions = {
                 html: `
                     <div style="font-family: Arial, sans-serif; color: #52c4f5; line-height: 1.8;">
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <img src="cid:lbcaliperlogo" alt="LB Calipers Logo" style="max-width: 200px;">
+                            <img src="${logoUrl}" alt="LB Calipers Logo" style="max-width: 200px;">
                         </div>
                         <h1 style="text-align: center; font-size: 32px; font-weight: bold; color: #52c4f5; margin-bottom: 20px;">
                             New Booking Inquiry #${inquiry_id}
@@ -123,14 +109,7 @@ export const actions = {
                             This email was generated automatically by the LB Calipers booking system. Please do not reply to this email.
                         </p>
                     </div>
-                `,
-                attachments: [
-                    {
-                        filename: 'lb-caliper-logo-2.png',
-                        content: imageBuffer,
-                        cid: 'lbcaliperlogo'
-                    }
-                ]
+                `
             };
 
             await transporter.sendMail(mailOptions, (error, info) => {
@@ -154,4 +133,3 @@ export const actions = {
         }
     }
 };
-
