@@ -207,6 +207,7 @@
   .finalize-button {
     align-self: flex-end;
     margin-top: -40px;
+    width: fit-content;
   }
 
   .table-wrapper {
@@ -221,7 +222,6 @@
     margin-top: 15px;
     background-color: rgba(12, 32, 57, 0.687);
     color: white;
-    min-width: 800px;
   }
 
   .inquiries-table th,
