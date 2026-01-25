@@ -86,64 +86,66 @@
     {/if}
 
     <!-- Data Table -->
-    <table class="inquiries-table">
-      <thead>
-        <tr>
-          <th>Client ID #</th>
-          <th>Customer Name</th>
-          <th>Phone</th>
-          <th>Service</th>
-          <th>Caliper Color</th>
-          <th>Wheel Color</th>
-          <th>Appointment Date</th>
-          <th>Additional Details</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each data.inquiries as inquiry}
+    <div class="table-wrapper">
+      <table class="inquiries-table">
+        <thead>
           <tr>
-            <td>{inquiry.inquiry_id}</td>
-            <td>{inquiry.first_name} {inquiry.last_name}</td>
-            <td>{inquiry.phone}</td>
-            <td>{inquiry.service}</td>
-            <td>{inquiry.caliper_color || "N/A"}</td>
-            <td>{inquiry.wheel_color || "N/A"}</td>
-            <td>{new Date(inquiry.date).toLocaleDateString()}</td>
-            <td>{inquiry.additional_details}</td>
-            <td>
-              {#if !data.showHandled}
-                <form action="?/markHandled" method="post" style="display: inline;">
-                  <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
-                  <button class="action-button">Mark Handled</button>
-                </form>
-                <button
-                  class="action-button book-button"
-                  style="background-color: {inquiry.book_status ? 'lightred' : 'neongreen'}; color: black;"
-                  on:click={() => handleBooking(inquiry.inquiry_id)}
-                  disabled={inquiry.book_status || loadingButtonId === inquiry.inquiry_id}
-                >
-                  {loadingButtonId === inquiry.inquiry_id
-                    ? "Booking..."
-                    : inquiry.book_status
-                    ? "Booked!"
-                    : "Book"}
-                </button>
-              {:else}
-                <form action="?/undoHandled" method="post" style="display: inline;">
-                  <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
-                  <button class="action-button">Undo</button>
-                </form>
-                <form action="?/deleteInquiry" method="post" style="display: inline;">
-                  <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
-                  <button class="action-button delete">Delete</button>
-                </form>
-              {/if}
-            </td>
+            <th>Client ID #</th>
+            <th>Customer Name</th>
+            <th>Phone</th>
+            <th>Service</th>
+            <th>Caliper Color</th>
+            <th>Wheel Color</th>
+            <th>Appointment Date</th>
+            <th>Additional Details</th>
+            <th>Actions</th>
           </tr>
-        {/each}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {#each data.inquiries as inquiry}
+            <tr>
+              <td data-label="Client ID #">{inquiry.inquiry_id}</td>
+              <td data-label="Customer Name">{inquiry.first_name} {inquiry.last_name}</td>
+              <td data-label="Phone">{inquiry.phone}</td>
+              <td data-label="Service">{inquiry.service}</td>
+              <td data-label="Caliper Color">{inquiry.caliper_color || "N/A"}</td>
+              <td data-label="Wheel Color">{inquiry.wheel_color || "N/A"}</td>
+              <td data-label="Appointment Date">{new Date(inquiry.date).toLocaleDateString()}</td>
+              <td data-label="Additional Details">{inquiry.additional_details}</td>
+              <td data-label="Actions">
+                {#if !data.showHandled}
+                  <form action="?/markHandled" method="post" style="display: inline;">
+                    <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
+                    <button class="action-button">Mark Handled</button>
+                  </form>
+                  <button
+                    class="action-button book-button"
+                    style="background-color: {inquiry.book_status ? 'lightred' : 'neongreen'}; color: black;"
+                    on:click={() => handleBooking(inquiry.inquiry_id)}
+                    disabled={inquiry.book_status || loadingButtonId === inquiry.inquiry_id}
+                  >
+                    {loadingButtonId === inquiry.inquiry_id
+                      ? "Booking..."
+                      : inquiry.book_status
+                      ? "Booked!"
+                      : "Book"}
+                  </button>
+                {:else}
+                  <form action="?/undoHandled" method="post" style="display: inline;">
+                    <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
+                    <button class="action-button">Undo</button>
+                  </form>
+                  <form action="?/deleteInquiry" method="post" style="display: inline;">
+                    <input type="hidden" name="inquiry_id" value={inquiry.inquiry_id} />
+                    <button class="action-button delete">Delete</button>
+                  </form>
+                {/if}
+              </td>
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+    </div>
   {:else}
     <p class="centered-title">No inquiries found or data not loaded.</p>
   {/if}
@@ -155,6 +157,7 @@
     color: #52c4f5;
     font-size: 24px;
     margin-bottom: 20px;
+    padding: 0 1rem;
   }
 
   .messages-container {
@@ -180,6 +183,7 @@
     gap: 15px;
     align-items: flex-start;
     margin-bottom: 20px;
+    padding: 0 1rem;
   }
 
   .sort-button {
@@ -205,12 +209,19 @@
     margin-top: -40px;
   }
 
+  .table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .inquiries-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
     background-color: rgba(12, 32, 57, 0.687);
     color: white;
+    min-width: 800px;
   }
 
   .inquiries-table th,
@@ -234,6 +245,7 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.3s ease;
+    margin: 2px;
   }
 
   .action-button:hover {
@@ -253,5 +265,60 @@
 
   .action-button.delete {
     background-color: #dc2b25;
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .centered-title {
+      font-size: 20px;
+    }
+
+    .success-message {
+      font-size: 1rem;
+      padding: 8px 12px;
+    }
+
+    .sort-buttons-container {
+      gap: 10px;
+    }
+
+    .finalize-button {
+      align-self: center;
+      margin-top: 0;
+    }
+
+    .inquiries-table {
+      font-size: 14px;
+    }
+
+    .inquiries-table th,
+    .inquiries-table td {
+      padding: 8px 6px;
+    }
+
+    .action-button {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .centered-title {
+      font-size: 18px;
+    }
+
+    .sort-button {
+      padding: 8px 16px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .success-message {
+      font-size: 0.9rem;
+    }
+
+    .inquiries-table {
+      font-size: 12px;
+    }
   }
 </style>
