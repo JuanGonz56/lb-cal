@@ -33,8 +33,7 @@
 	let confirmationResult = null;
 	let recaptchaVerifier = null;
 	let feedbackMessage = '';
-	let signedInUser = null;
-	let step = 1; // 1 = enter phone, 2 = enter code
+	let step = 1;
 	let isLoading = false;
 
 	// Initialize RecaptchaVerifier
@@ -45,7 +44,7 @@
 					'recaptcha-container',
 					{
 						size: 'normal',
-						callback: (response) => {
+						callback: () => {
 							console.log('reCAPTCHA solved');
 							feedbackMessage = 'reCAPTCHA verified. Ready to send code.';
 						},
@@ -68,13 +67,11 @@
 
 	// Send verification code
 	const sendVerificationCode = async () => {
-		// Basic phone validation
 		if (!phoneNumber || phoneNumber.length < 10) {
 			feedbackMessage = 'Please enter a valid phone number with country code (e.g., +1 555-555-5555).';
 			return;
 		}
 
-		// Format phone number to ensure it has +
 		let formattedPhone = phoneNumber.trim();
 		if (!formattedPhone.startsWith('+')) {
 			formattedPhone = '+' + formattedPhone;
@@ -90,7 +87,6 @@
 		} catch (error) {
 			console.error('Error sending verification code:', error);
 			
-			// Handle specific error cases
 			if (error.code === 'auth/invalid-phone-number') {
 				feedbackMessage = 'Invalid phone number format. Use format: +1 555-555-5555';
 			} else if (error.code === 'auth/too-many-requests') {
@@ -99,7 +95,6 @@
 				feedbackMessage = `Failed to send code: ${error.message}`;
 			}
 			
-			// Reset reCAPTCHA on error
 			if (recaptchaVerifier) {
 				recaptchaVerifier.clear();
 				recaptchaVerifier = null;
@@ -121,25 +116,9 @@
 		feedbackMessage = 'Verifying code...';
 
 		try {
-			const result = await confirmationResult.confirm(verificationCode);
-			signedInUser = result.user;
-			
-			// Optional: Check if user is authorized (only specific UIDs can access)
-			const authorizedUIDs = [
-				'Vh9DQKhZqYNJhpAGAA6W1AnymF82', // Replace with your actual UIDs
-			];
-			
-			// Comment out these lines if you want to allow any phone number to log in:
-			// if (!authorizedUIDs.includes(result.user.uid)) {
-			// 	await auth.signOut();
-			// 	feedbackMessage = 'Unauthorized access. This account is not authorized.';
-			// 	isLoading = false;
-			// 	return;
-			// }
-			
+			await confirmationResult.confirm(verificationCode);
 			feedbackMessage = 'Successfully logged in! Redirecting...';
 			
-			// Redirect to inquiries page after successful login
 			setTimeout(() => {
 				goto('/inquiries');
 			}, 1000);
@@ -179,7 +158,6 @@
 		<p class="subtitle">Sign in with your phone number</p>
 
 		{#if step === 1}
-			<!-- Phone Number Entry -->
 			<div class="input-group">
 				<label for="phone-number">Phone Number</label>
 				<input
@@ -201,7 +179,6 @@
 				{isLoading ? 'Sending...' : 'Send Verification Code'}
 			</button>
 		{:else if step === 2}
-			<!-- Verification Code Entry -->
 			<div class="input-group">
 				<label for="verification-code">Verification Code</label>
 				<input

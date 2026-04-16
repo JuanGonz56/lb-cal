@@ -1,5 +1,4 @@
 <script>
-	import Forbidden from '$lib/Forbidden.svelte';
 	import PageHeader from '$lib/PageHeader.svelte';
 	import PageFooter from '$lib/PageFooter.svelte';
 	import { page } from '$app/stores';
@@ -109,7 +108,7 @@
 
     <!-- Private Route Logic -->
     {#if currentPath === "/inquiries" || currentPath === "/finalizeBook"}
-        <SignedIn let:user>
+        <SignedIn>
             <!-- Authorized Content -->
             <slot />
         </SignedIn>

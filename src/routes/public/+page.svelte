@@ -1,12 +1,4 @@
 <script>
-  // Backend or configuration-provided dimming value (0 = no dim, 1 = full dim)
-  let dimmingValue = 0.6; // Set the desired default dimming value here (e.g., 0.6 = 60% dim)
-
-  // Function to convert dimming value to box-shadow opacity
-  function getDimmingShadow(value) {
-    const dimOpacity = 1 - value; // Calculate dimming intensity
-    return `0 0 30px rgba(10, 10, 10, ${dimOpacity})`; // Apply shadow with adjustable opacity
-  }
 
   // Service data
   const services = [
@@ -26,8 +18,6 @@
       images: ["/images/tint-service.jpg"]
     }
   ];
-
-  let activeIndex = 0;
 
   function cycleImages(serviceIndex) {
     setInterval(() => {
@@ -78,7 +68,7 @@
 
   <!-- Services Section -->
   <div class="services-section">
-    {#each services as service, index}
+    {#each services as service}
       <div class="service-card">
         <div class="image-container-service">
           <img src={service.images[service.activeIndex]} alt={service.name} class="service-image" />
